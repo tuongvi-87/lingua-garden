@@ -14,10 +14,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Sans:wght@500;600;700&family=Noto+Serif+SC:wght@600;700&display=swap">
 <style>
-/* Layout: sticky top bar + one centered column (max 1000px); cards pair up on iPad, stack on phone. Hanzi in serif is the display voice; pinyin is colored by tone. */
+/* Layout: sticky top bar + one centered column; a lesson is a focused step-by-step player. Hanzi in serif is the display voice; pinyin is colored by tone; English carries an ink-blue badge, Chinese a cinnabar one. */
 :root{
   --bg:#edf2ee; --surface:#ffffff; --surface-2:#e2ebe5; --ink:#17201c; --muted:#56665e; --line:#cbd8d0;
-  --jade:#1d6b58; --jade-ink:#ffffff; --jade-soft:#d2e6dd; --seal:#b9402c; --gold:#b98a1f;
+  --jade:#1d6b58; --jade-ink:#ffffff; --jade-soft:#d2e6dd; --seal:#b9402c; --seal-soft:#f5ddd6; --navy:#264f86; --navy-soft:#dde6f3; --gold:#b98a1f;
   --t1:#c23a33; --t2:#c27412; --t3:#23804a; --t4:#2a5cb3; --t0:#77827c;
   --ok:#1f7a4a; --ok-soft:#d7eedf; --bad:#b23a2c; --bad-soft:#f6dcd6;
   --f-body:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -27,12 +27,12 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111714; --surface:#19211d; --surface-2:#212c26; --ink:#e4ebe7; --muted:#9aaba2; --line:#2d3a33;
-  --jade:#5fbf9d; --jade-ink:#0d1a15; --jade-soft:#1f3a2f; --seal:#e46d57; --gold:#e2b84f;
+  --jade:#5fbf9d; --jade-ink:#0d1a15; --jade-soft:#1f3a2f; --seal:#e46d57; --seal-soft:#3d221c; --navy:#8fb2ec; --navy-soft:#1e2b40; --gold:#e2b84f;
   --t1:#f06b62; --t2:#f0a642; --t3:#5cc47f; --t4:#76a0ee; --t0:#9aa59f;
   --ok:#5cc47f; --ok-soft:#1d3a28; --bad:#f07a6a; --bad-soft:#40211c; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111714; --surface:#19211d; --surface-2:#212c26; --ink:#e4ebe7; --muted:#9aaba2; --line:#2d3a33;
-  --jade:#5fbf9d; --jade-ink:#0d1a15; --jade-soft:#1f3a2f; --seal:#e46d57; --gold:#e2b84f;
+  --jade:#5fbf9d; --jade-ink:#0d1a15; --jade-soft:#1f3a2f; --seal:#e46d57; --seal-soft:#3d221c; --navy:#8fb2ec; --navy-soft:#1e2b40; --gold:#e2b84f;
   --t1:#f06b62; --t2:#f0a642; --t3:#5cc47f; --t4:#76a0ee; --t0:#9aa59f;
   --ok:#5cc47f; --ok-soft:#1d3a28; --bad:#f07a6a; --bad-soft:#40211c; color-scheme:dark}
 
@@ -40,16 +40,15 @@
 body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);-webkit-text-size-adjust:100%}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 h1,h2,h3{line-height:1.25;text-wrap:balance;margin:0}
-h1{font-size:1.75rem;font-weight:700;letter-spacing:-.01em}
+h1{font-size:1.7rem;font-weight:700;letter-spacing:-.01em}
 h2{font-size:1.25rem;font-weight:700}
 h3{font-size:1.05rem;font-weight:600}
 p{margin:0}
 button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 button:focus-visible,a:focus-visible{outline:3px solid var(--jade);outline-offset:2px}
-.wrap{max-width:1000px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:24px}
 
-/* top bar */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:8;background:var(--bg);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:14px;padding-block:10px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;border:0;background:none;padding:0}
@@ -57,14 +56,14 @@ main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
 .brand b{font-weight:700;font-size:1.05rem}
 .nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none;max-width:100%}
 .nav::-webkit-scrollbar{display:none}
-.nav button{border:0;background:none;padding:9px 13px;border-radius:999px;font-weight:500;color:var(--muted);white-space:nowrap;min-height:42px}
+.nav button{border:0;background:none;padding:9px 13px;border-radius:999px;font-weight:500;color:var(--muted);white-space:nowrap;min-height:42px;position:relative}
 .nav button[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.nav .badge{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:99px;background:var(--seal);color:#fff;font-size:.72rem;font-weight:700;margin-left:4px;padding:0 5px}
 .sync{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:6px;white-space:nowrap}
 .sync i{width:8px;height:8px;border-radius:50%;background:var(--t0);display:inline-block}
 .sync[data-s="cloud"] i{background:var(--ok)}
 .sync[data-s="loading"] i{background:var(--gold)}
 
-/* common */
 .eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .sub{color:var(--muted);max-width:62ch}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -74,6 +73,7 @@ main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-weight:600}
 .btn.primary{background:var(--jade);border-color:var(--jade);color:var(--jade-ink)}
 .btn.ghost{background:transparent}
+.btn.big{min-height:56px;padding:0 26px;font-size:1.05rem}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .muted{color:var(--muted)}
@@ -84,72 +84,89 @@ main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
 .pill{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
 .pill.done{background:var(--ok-soft);color:var(--ok)}
 .pill.now{background:var(--jade);color:var(--jade-ink)}
+.lang{display:inline-flex;align-items:center;font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.lang.zh{background:var(--seal-soft);color:var(--seal)}
+.lang.en{background:var(--navy-soft);color:var(--navy)}
+.lang.mix{background:var(--surface-2);color:var(--muted)}
 .bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
 .bar i{display:block;height:100%;background:var(--jade);border-radius:99px}
-.back{align-self:flex-start;border:0;background:none;color:var(--muted);font-weight:600;padding:6px 0;min-height:40px}
 .note{border-radius:12px;background:var(--jade-soft);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
 .note.warn{background:var(--surface-2)}
 .note ul{margin:0;padding-left:20px}
 .empty{color:var(--muted);padding:18px;border:1px dashed var(--line);border-radius:12px;text-align:center}
-
-/* home */
 .hello{display:flex;flex-direction:column;gap:6px}
-.journey{position:relative;overflow:hidden}
-.journey .glyph{position:absolute;right:-6px;top:-18px;font:700 120px/1 var(--f-hz);color:var(--jade-soft);pointer-events:none}
-.journey.en .glyph{font-family:var(--f-body);font-size:96px;top:-10px}
-.journey > *:not(.glyph){position:relative}
+
+/* today */
+.today{position:relative;overflow:hidden;gap:14px}
+.today .glyph{position:absolute;right:-4px;top:-20px;font:700 130px/1 var(--f-hz);color:var(--jade-soft);pointer-events:none}
+.today > *:not(.glyph){position:relative}
+.parts{display:flex;flex-direction:column;gap:8px}
+.parts div{display:flex;gap:10px;align-items:baseline}
 .plantbox{display:flex;align-items:flex-end;gap:16px}
-.plant{width:96px;height:88px;flex:none}
+.plant{width:92px;height:84px;flex:none}
 .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
 .stat b{font-size:1.6rem;font-variant-numeric:tabular-nums;line-height:1.2}
 .stat span{font-size:.82rem;color:var(--muted)}
-.daily{display:flex;flex-direction:column;gap:0;padding:6px 20px}
-.daily .it{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
-.daily .it:last-child{border-bottom:0}
-.daily .min{flex:none;width:52px;height:52px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center;font-weight:700;font-size:.85rem;text-align:center;line-height:1.1}
-.daily .tx{flex:1;min-width:0}
+.phase-bars{display:flex;flex-direction:column;gap:10px}
+.phase-bars .ph{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}
+.phase-bars .ph .bar{grid-column:1/-1}
 
-/* journey page */
+/* path */
 .level{display:flex;flex-direction:column;gap:10px}
 .level-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .lessons{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.lrow{display:flex;align-items:center;gap:14px;padding:14px 18px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;width:100%;min-height:64px}
+.lessons .uhead{padding:12px 18px;background:var(--surface-2);display:flex;align-items:center;gap:10px;font-weight:600}
+.lessons .uhead .hz{font-size:1.2rem}
+.lrow{display:flex;align-items:center;gap:14px;padding:12px 18px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;width:100%;min-height:62px}
 .lrow:last-child{border-bottom:0}
-.lrow .n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--surface-2);font-variant-numeric:tabular-nums}
+.lrow .n{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--surface-2);font-variant-numeric:tabular-nums;font-size:.9rem}
 .lrow.done .n{background:var(--ok-soft);color:var(--ok)}
 .lrow.now .n{background:var(--jade);color:var(--jade-ink)}
-.lrow.locked{opacity:.55}
-.lrow .tx{flex:1;min-width:0}
-.lrow .tx small{display:block;color:var(--muted)}
-.locked-levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.lrow.locked{opacity:.5}
+.lrow .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.lrow .tx small{color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.locked-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:720px){.locked-levels{grid-template-columns:1fr}}
 .lv{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}
 .lv ul{margin:0;padding-left:18px;color:var(--muted);font-size:.9rem}
 
-/* lesson */
-.lesson-head{display:flex;flex-direction:column;gap:6px}
-.tabs{display:flex;gap:6px;background:var(--surface-2);padding:4px;border-radius:12px;align-self:flex-start}
-.tabs button{border:0;background:none;padding:9px 16px;border-radius:9px;font-weight:600;color:var(--muted);min-height:42px}
-.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0/.08)}
+/* player */
+.player{display:flex;flex-direction:column;gap:18px;max-width:760px;width:100%;margin:0 auto}
+.phead{display:flex;align-items:center;gap:12px}
+.phead .bar{flex:1}
+.pclose{border:1px solid var(--line);background:var(--surface);border-radius:12px;width:44px;height:44px;display:grid;place-items:center;flex:none;font-size:1.1rem}
+.pcount{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pbody{display:flex;flex-direction:column;gap:16px;min-height:50vh}
+.pstep-head{display:flex;flex-direction:column;gap:6px}
+.pfoot{display:flex;justify-content:space-between;gap:10px;position:sticky;bottom:0;padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line)}
+.goal-list{display:flex;flex-direction:column;gap:10px;padding:0;margin:0;list-style:none}
+.goal-list li{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .prose{display:flex;flex-direction:column;gap:14px;max-width:70ch}
 .prose ul,.prose ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+
+/* chips & cards */
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chip{display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-width:78px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
 .chip .hz{font-size:1.6rem;line-height:1.15}
 .chip .py{font-size:.95rem}
-.chip .vi{font-size:.75rem;color:var(--muted);max-width:110px;text-align:center;line-height:1.25}
+.chip .w{font-weight:600;font-size:1.05rem}
+.chip .ipa{font-family:var(--f-py);font-size:.85rem;color:var(--navy)}
+.chip .vi{font-size:.75rem;color:var(--muted);max-width:130px;text-align:center;line-height:1.25}
+.chip.en{border-color:var(--navy-soft)}
 .chip:active{transform:scale(.97)}
 .formula{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap}
 .formula .part{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:86px}
 .formula .part b{font:600 1.6rem/1.2 var(--f-py)}
 .formula .part span{font-size:.75rem;color:var(--muted)}
 .formula .op{align-self:center;font-size:1.3rem;color:var(--muted)}
+.fbox{background:var(--surface);border:2px dashed var(--line);border-radius:12px;padding:14px 16px;font-size:1.15rem;font-weight:600}
 .group{display:flex;flex-direction:column;gap:10px}
 .group h3 small{font-weight:500;color:var(--muted);font-size:.85rem;margin-left:6px}
 .sound{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .snd{display:flex;flex-direction:column;gap:4px;text-align:left;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);min-height:96px}
 .snd .top-line{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
 .snd .big{font:700 1.7rem/1 var(--f-py);color:var(--jade)}
+.snd.en .big{color:var(--navy);font-size:1.25rem}
 .snd .ex{font-size:.9rem}
 .snd .tip{font-size:.78rem;color:var(--muted);line-height:1.35}
 .tones{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
@@ -162,19 +179,48 @@ main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
 .pair{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
 .pair .chips{gap:8px}
 .pair p{font-size:.84rem;color:var(--muted)}
+.wcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.wcard .hzbig{border:0;background:none;font:700 4.2rem/1.1 var(--f-hz);padding:0}
+.wcard .wbig{border:0;background:none;font:700 2.2rem/1.2 var(--f-body);color:var(--navy);padding:0}
+.wcard .pybig{font:600 1.6rem/1.2 var(--f-py)}
+.wcard .mean{font-size:1.15rem}
+.wcard .ex{width:100%;border-top:1px solid var(--line);padding-top:14px;display:flex;gap:12px;align-items:flex-start;text-align:left}
+.wcard .ex .tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wcard .ex .hz{font-size:1.25rem}
+.playsm{border:0;background:var(--surface-2);border-radius:10px;width:44px;height:44px;display:grid;place-items:center;flex:none}
+.playsm svg{width:20px;height:20px}
+.exlist{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.exrow{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-bottom:1px solid var(--line)}
+.exrow:last-child{border-bottom:0}
+.exrow .tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.exrow .hz{font-size:1.3rem}
+.exrow .en{font-weight:600}
+.mistakes{display:flex;flex-direction:column;gap:8px}
+.mis{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+.mis .x{color:var(--bad);text-decoration:line-through;text-decoration-thickness:1px}
+.mis .v{color:var(--ok);font-weight:600}
+.dlg{display:flex;flex-direction:column;gap:10px}
+.dl{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.dl .who{flex:none;width:58px;font-size:.78rem;font-weight:700;color:var(--muted);padding-top:12px}
+.dl .tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.dl .hz{font-size:1.35rem}
+.hide-py .dl .py,.hide-vi .dl .vi{visibility:hidden}
+.sample{background:var(--navy-soft);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.sample p{line-height:1.6}
+.timer{font:700 2rem/1 var(--f-py);font-variant-numeric:tabular-nums}
 .words{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .wrow{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line)}
 .wrow:last-child{border-bottom:0}
-.wrow .playw{border:0;background:var(--surface-2);border-radius:10px;width:44px;height:44px;display:grid;place-items:center;flex:none}
 .wrow .hz{font-size:1.5rem;min-width:3.2em}
+.wrow .w{font-weight:700;min-width:6em;color:var(--navy)}
 .wrow .tx{flex:1;min-width:0}
 .wrow .tx small{display:block;color:var(--muted)}
-.save{border:1px solid var(--line);background:var(--surface);border-radius:10px;min-width:44px;height:44px;display:inline-grid;place-items:center;color:var(--muted);padding:0 10px}
+.save{border:1px solid var(--line);background:var(--surface);border-radius:10px;min-width:44px;height:44px;display:inline-grid;place-items:center;color:var(--muted);padding:0 10px;flex:none}
 .save.on{color:var(--gold);border-color:var(--gold)}
 .save svg{width:20px;height:20px}
 .save.on svg path{fill:currentColor}
 
-/* quiz & games */
+/* quiz */
 .quiz{display:flex;flex-direction:column;gap:16px;max-width:680px}
 .qbar{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.85rem;color:var(--muted);font-weight:600}
 .dots{display:flex;gap:5px;flex-wrap:wrap}
@@ -182,17 +228,23 @@ main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
 .dots i.d{background:var(--jade)}
 .dots i.c{background:var(--gold)}
 .qprompt{font-size:1.15rem;font-weight:600}
-.qshow{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.qprompt .hz{font-size:1.3rem}
+.qshow{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;text-align:center}
 .qshow .hz{font-size:3rem;line-height:1.1}
 .qshow .py{font-size:1.6rem}
+.qshow .w{font-size:2rem;font-weight:700;color:var(--navy)}
+.qshow .sent{font-size:1.15rem;font-weight:500}
 .play{display:inline-flex;align-items:center;gap:10px;border:0;background:var(--jade);color:var(--jade-ink);border-radius:999px;font-weight:600;min-height:52px;padding:0 22px;align-self:flex-start}
+.play.en{background:var(--navy);color:var(--surface)}
 .play.big{min-height:64px;padding:0 28px;font-size:1.05rem}
 .play svg{width:22px;height:22px}
 .opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
 .opts.letters{display:flex;flex-wrap:wrap;gap:8px}
 .opts.letters .opt{min-width:62px;font:700 1.8rem/1 var(--f-py);justify-content:center}
 .opt{display:flex;align-items:center;gap:10px;min-height:60px;padding:10px 16px;border-radius:12px;border:2px solid var(--line);background:var(--surface);text-align:left;font-size:1.05rem}
 .opt .py{font-size:1.3rem}
+.opt .hz{font-size:1.3rem}
 .opt.ok{border-color:var(--ok);background:var(--ok-soft)}
 .opt.bad{border-color:var(--bad);background:var(--bad-soft)}
 .opt[disabled]{cursor:default}
@@ -213,7 +265,7 @@ main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
 .stars .off{color:var(--surface-2)}
 .games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 @media (max-width:720px){.games{grid-template-columns:1fr}}
-.game .art{height:84px;border-radius:12px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;gap:14px;font:700 1.8rem/1 var(--f-py)}
+.art{height:84px;border-radius:12px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;gap:14px;font:700 1.8rem/1 var(--f-py)}
 .build{display:flex;flex-direction:column;gap:14px}
 .build .slot{display:flex;flex-direction:column;gap:8px}
 .build .slot > span{font-size:.82rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
@@ -223,6 +275,10 @@ main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
 .build .choices button.ok{border-color:var(--ok);background:var(--ok-soft)}
 .build .choices button.bad{border-color:var(--bad);background:var(--bad-soft)}
 .preview{font:700 2.4rem/1.1 var(--f-py);min-height:2.6rem;color:var(--jade)}
+.flash{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;min-height:300px;justify-content:center}
+.flash .hz{font-size:4rem;line-height:1.1}
+.flash .w{font-size:2.2rem;font-weight:700;color:var(--navy)}
+.flash .back{display:flex;flex-direction:column;gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:14px;width:100%}
 .voice-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .seg{display:inline-flex;background:var(--surface-2);border-radius:10px;padding:3px}
 .seg button{border:0;background:none;padding:8px 14px;border-radius:8px;font-weight:600;color:var(--muted);min-height:40px}
@@ -235,17 +291,17 @@ main.wrap{padding-block:22px 64px;display:flex;flex-direction:column;gap:26px}
   <button class="brand" data-act="go" data-to="home" aria-label="Trang chính Lingua Garden"><span class="seal">园</span><b>Lingua Garden</b></button>
   <span class="sync" id="sync" data-s="local"><i></i><span>Lưu trên máy này</span></span>
   <nav class="nav" id="nav" aria-label="Điều hướng">
-    <button data-act="go" data-to="home">Trang chính</button>
-    <button data-act="go" data-to="chinese">Tiếng Trung</button>
-    <button data-act="go" data-to="games">Trò chơi Pinyin</button>
+    <button data-act="go" data-to="home">Hôm nay</button>
+    <button data-act="go" data-to="path">Lộ trình</button>
+    <button data-act="go" data-to="review">Ôn tập<span class="badge" id="dueBadge" hidden></span></button>
+    <button data-act="go" data-to="practice">Luyện thêm</button>
     <button data-act="go" data-to="words">Sổ từ</button>
-    <button data-act="go" data-to="english">Tiếng Anh</button>
   </nav>
 </div></header>
 <main class="wrap" id="view"></main>
 
 <script>
-/* ---------- helpers ---------- */
+/* ========== helpers ========== */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -253,23 +309,59 @@ const pick=a=>a[Math.random()*a.length|0];
 const sample=(a,n)=>shuffle(a).slice(0,n);
 const pad=n=>String(n).padStart(2,'0');
 const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return ymd(d)};
+const TODAY=()=>ymd(new Date());
+const CJK=/[　-〿一-鿿＀-￯]+/g;
+const PYMARK=/[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/;
+const hzWrap=s=>esc(s).replace(CJK,m=>`<span class="hz">${m}</span>`);
 
-/* ---------- pinyin tone logic ---------- */
+/* ========== pinyin tone logic ========== */
 const MARKS={a:'āáǎà',o:'ōóǒò',e:'ēéěè',i:'īíǐì',u:'ūúǔù','ü':'ǖǘǚǜ'};
 const UNMARK={};for(const[v,s]of Object.entries(MARKS))[...s].forEach((c,i)=>UNMARK[c]=[v,i+1]);
 function markIndex(s){s=s.toLowerCase();if(s.includes('a'))return s.indexOf('a');if(s.includes('e'))return s.indexOf('e');if(s.includes('ou'))return s.indexOf('o');for(let k=s.length-1;k>=0;k--)if('aeiouü'.includes(s[k]))return k;return -1}
 function mark(s,t){if(!t)return s;const i=markIndex(s);if(i<0)return s;return s.slice(0,i)+MARKS[s[i].toLowerCase()][t-1]+s.slice(i+1)}
 function parse(syl){let tone=0,base='';for(const ch of syl){if(UNMARK[ch]){base+=UNMARK[ch][0];tone=UNMARK[ch][1]}else base+=ch}return{base,tone}}
-function retone(syl,t){const{base}=parse(syl);const cap=base[0]!==base[0].toLowerCase();let r=mark(base.toLowerCase(),t);return cap?r[0].toUpperCase()+r.slice(1):r}
+function retone(syl,t){const m=syl.match(/^([^A-Za-züāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]*)(.*?)([^A-Za-züāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]*)$/);const pre=m[1],core=m[2],post=m[3];if(!core)return syl;const{base}=parse(core);const cap=base[0]!==base[0].toLowerCase();let r=mark(base.toLowerCase(),t);if(cap)r=r[0].toUpperCase()+r.slice(1);return pre+r+post}
 const disp=s=>s.replace(/·/g,'');
-/* colour each syllable by its tone; '·' marks a syllable boundary inside a word */
+/* '·' joins syllables inside a word; each syllable is coloured by its tone */
 function colorPy(py){return py.split(/([ ·])/).map(p=>{if(p==='·')return'';if(p===' '||!p)return p;return`<span class="t${parse(p).tone}">${esc(p)}</span>`}).join('')}
 function contour(t){const L={1:[5,5],2:[3,5],3:[2,1,4],4:[5,1]}[t];const W=40,H=26;const pts=L.map((v,i)=>[4+i*(W-8)/(L.length-1),H-3-(v-1)*(H-6)/4]);return`<svg viewBox="0 0 ${W} ${H}" width="40" height="26" aria-hidden="true"><path d="M${pts.map(p=>p.map(n=>n.toFixed(1)).join(' ')).join(' L')}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
 const TONE_NAME={1:'Thanh 1',2:'Thanh 2',3:'Thanh 3',4:'Thanh 4'};
 const toneLabel=t=>`<span class="tone t${t}">${contour(t)}<b>${TONE_NAME[t]}</b></span>`;
 
-/* ---------- data ---------- */
-/* [base, [tone1..tone4 hanzi], [Vietnamese meanings]] ; null = no common character */
+/* ========== speech (Chinese + English) ========== */
+let zhVoice=null,enVoice=null,voiceReady=false;
+function loadVoices(){if(!('speechSynthesis'in window))return;const vs=speechSynthesis.getVoices();if(!vs.length)return;voiceReady=true;
+  zhVoice=vs.find(v=>/zh[-_]CN/i.test(v.lang)&&/tingting|ting-ting|xiaoxiao|yunxi|meijia/i.test(v.name))||vs.find(v=>/zh[-_](CN|Hans)/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||vs.find(v=>/^cmn/i.test(v.lang))||null;
+  enVoice=vs.find(v=>/en[-_]GB/i.test(v.lang)&&/daniel|kate|serena|arthur|martha|sonia|libby|ryan/i.test(v.name))||vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/en[-_]US/i.test(v.lang)&&/samantha|ava|jenny|aria/i.test(v.name))||vs.find(v=>/en[-_]US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;
+  const el=$('#voiceStatus');if(el)el.innerHTML=voiceText()}
+if('speechSynthesis'in window){loadVoices();speechSynthesis.addEventListener?.('voiceschanged',loadVoices)}
+function voiceText(){if(!('speechSynthesis'in window))return'Trình duyệt này không có giọng đọc. Hãy mở bằng Safari hoặc Chrome.';if(!voiceReady)return'Đang tìm giọng đọc…';
+  const z=zhVoice?`Tiếng Trung: <b>${esc(zhVoice.name)}</b>`:'Chưa có giọng tiếng Trung (iPad: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Trung → tải giọng Tingting).';
+  const e=enVoice?`Tiếng Anh: <b>${esc(enVoice.name)}</b>`:'Chưa có giọng tiếng Anh.';return z+'<br>'+e}
+function utter(text,lang){const u=new SpeechSynthesisUtterance(lang==='en'?text:disp(text));if(lang==='en'){u.lang=enVoice?enVoice.lang:'en-GB';if(enVoice)u.voice=enVoice;u.rate=Math.min(1,state.rate+0.1)}else{u.lang='zh-CN';if(zhVoice)u.voice=zhVoice;u.rate=state.rate}return u}
+function speak(text,lang){if(!('speechSynthesis'in window)){toast('Thiết bị này chưa đọc được âm thanh');return}try{speechSynthesis.cancel();speechSynthesis.speak(utter(text,lang))}catch(e){}}
+function speakQueue(items){if(!('speechSynthesis'in window))return;try{speechSynthesis.cancel();items.forEach(([t,l])=>speechSynthesis.speak(utter(t,l)))}catch(e){}}
+
+/* ========== icons & small parts ========== */
+const ICON={
+ play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+ star:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+ starFill:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" fill="currentColor"/></svg>',
+ lock:'<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+ check:'<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+const LZH='<span class="lang zh">中文</span>',LEN='<span class="lang en">ENGLISH</span>',LMIX='<span class="lang mix">中文 + EN</span>';
+const chip=(hz,py,vi)=>`<button class="chip" data-say="${esc(hz)}"><span class="hz">${esc(hz)}</span><span class="py">${colorPy(py)}</span>${vi?`<span class="vi">${esc(vi)}</span>`:''}</button>`;
+const enChip=(w,ipa,vi)=>`<button class="chip en" data-say-en="${esc(w)}"><span class="w">${esc(w)}</span>${ipa?`<span class="ipa">${esc(ipa)}</span>`:''}${vi?`<span class="vi">${esc(vi)}</span>`:''}</button>`;
+const playZh=t=>`<button class="playsm" data-say="${esc(t)}" aria-label="Nghe">${ICON.play}</button>`;
+const playEn=t=>`<button class="playsm" data-say-en="${esc(t)}" aria-label="Listen">${ICON.play}</button>`;
+const isSaved=k=>state.saved.includes(k);
+const saveBtn=k=>{const on=isSaved(k);return`<button class="save ${on?'on':''}" data-act="save" data-k="${esc(k)}" aria-pressed="${on}" aria-label="${on?'Bỏ lưu':'Lưu từ'}">${ICON.star}</button>`};
+const stars=n=>`<div class="stars" aria-label="${n} sao">${[1,2,3].map(k=>`<span class="${k<=n?'':'off'}">${ICON.starFill}</span>`).join('')}</div>`;
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+
+/* ========== PINYIN DATA ========== */
 const TS=[
  ['ma',['妈','麻','马','骂'],['mẹ','tê / cây gai','ngựa','mắng']],
  ['ba',['八','拔','把','爸'],['tám','nhổ','cầm, nắm','bố']],
@@ -303,7 +395,6 @@ const TS=[
  ['lan',[null,'蓝','懒','烂'],[null,'xanh lam','lười','nát']],
  ['shu',['书','熟','鼠','树'],['sách','chín, quen','chuột','cây']]
 ];
-/* 21 initials: [letter, group, example hanzi, example pinyin, tip] */
 const INI=[
  ['b','Âm môi','爸','bà','Gần “p” nhưng không bật hơi, nhẹ hơn chữ “b” tiếng Việt.'],
  ['p','Âm môi','怕','pà','“p” bật hơi mạnh. Để bàn tay trước miệng, phải thấy luồng hơi.'],
@@ -327,7 +418,6 @@ const INI=[
  ['c','Đầu lưỡi trước','次','cì','“ts” bật hơi mạnh.'],
  ['s','Đầu lưỡi trước','四','sì','Giống “x” tiếng Việt.']
 ];
-/* finals: [final, group, example hanzi, example pinyin, Vietnamese approximation] */
 const FIN=[
  ['a','Vận mẫu đơn','八','bā','như “a”'],['o','Vận mẫu đơn','波','bō','như “ô”, môi tròn'],['e','Vận mẫu đơn','饿','è','gần “ơ”, đọc trong họng'],
  ['i','Vận mẫu đơn','一','yī','như “i”'],['u','Vận mẫu đơn','五','wǔ','như “u”'],['ü','Vận mẫu đơn','鱼','yú','tròn môi mà đọc “i”'],
@@ -340,7 +430,6 @@ const FIN=[
  ['üe','Bắt đầu bằng ü','学','xué','“uê” tròn môi'],['üan','Bắt đầu bằng ü','远','yuǎn','gần “uyên”'],['ün','Bắt đầu bằng ü','云','yún','gần “uyn”'],
  ['er','Đặc biệt','二','èr','“ơ” rồi cong lưỡi']
 ];
-/* minimal pairs: [[pinyin,hanzi,meaning],[pinyin,hanzi,meaning], tip] */
 const PAIRS=[
  [['zhī','知','biết'],['zī','资','vốn'],'zh cong đầu lưỡi lên (gần “tr”); z để lưỡi thẳng sau răng (gần “ts”).'],
  [['chī','吃','ăn'],['cī','疵','tì vết'],'ch là “tr” bật hơi, cong lưỡi; c là “ts” bật hơi, lưỡi thẳng.'],
@@ -348,7 +437,7 @@ const PAIRS=[
  [['jī','鸡','gà'],['zhī','知','biết'],'j môi dẹt, lưỡi phẳng; zh cong lưỡi lên.'],
  [['qī','七','bảy'],['chī','吃','ăn'],'q môi dẹt như cười; ch cong lưỡi. Cả hai đều bật hơi.'],
  [['xī','西','tây'],['shī','诗','thơ'],'x môi dẹt; sh cong lưỡi, môi hơi tròn.'],
- [['xiǎo','小','nhỏ'],['shǎo','少','ít'],'x đi với i (xiao); sh không bao giờ đi với i kiểu này.'],
+ [['xiǎo','小','nhỏ'],['shǎo','少','ít'],'x đi với i (xiao); sh không đi với i kiểu này.'],
  [['nǐ','你','bạn'],['lǐ','里','trong'],'n cho hơi ra mũi; l cho hơi ra hai bên lưỡi.'],
  [['fàn','饭','cơm'],['fàng','放','đặt'],'-an khép ở đầu lưỡi; -ang mở rộng, vang ở cuống lưỡi.'],
  [['mén','门','cửa'],['méng','萌','dễ thương'],'-en gần “ân”; -eng gần “âng”.'],
@@ -361,7 +450,6 @@ const PAIRS=[
  [['rù','入','vào'],['lù','路','đường'],'r cong lưỡi lên; l chạm lưỡi vào lợi trên.'],
  [['jiān','尖','nhọn'],['zhān','沾','dính'],'j đi với i (jian); zh cong lưỡi.']
 ];
-/* reading practice: '·' separates syllables inside a word */
 const WORDS=[
  ['你好','nǐ hǎo','xin chào','Đọc thành ní hǎo (hai thanh 3 liền nhau)'],
  ['谢谢','xiè·xie','cảm ơn','Chữ thứ hai đọc thanh nhẹ'],
@@ -384,84 +472,37 @@ const WORDS=[
  ['很好','hén hǎo','rất tốt','hěn + hǎo → hén hǎo'],
  ['水果','shuí·guǒ','trái cây','shuǐ + guǒ → shuíguǒ']
 ];
-/* lookup for the word notebook */
-const IDX={};
-TS.forEach(([b,h,m])=>h.forEach((z,i)=>{if(z&&!IDX[z])IDX[z]={hz:z,py:mark(b,i+1),vi:m[i]}}));
-PAIRS.forEach(([a,b])=>[a,b].forEach(([p,z,v])=>{if(!IDX[z])IDX[z]={hz:z,py:p,vi:v}}));
-WORDS.forEach(([z,p,v])=>{IDX[z]={hz:z,py:p,vi:v}});
 
-/* ---------- speech ---------- */
-let zhVoice=null,voiceReady=false;
-function loadVoices(){if(!('speechSynthesis'in window))return;const vs=speechSynthesis.getVoices();if(!vs.length)return;voiceReady=true;zhVoice=vs.find(v=>/zh[-_]CN/i.test(v.lang)&&/tingting|ting-ting|xiaoxiao|yunxi|meijia/i.test(v.name))||vs.find(v=>/zh[-_](CN|Hans)/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||vs.find(v=>/^cmn/i.test(v.lang))||null;const el=$('#voiceStatus');if(el)el.innerHTML=voiceText()}
-if('speechSynthesis'in window){loadVoices();speechSynthesis.addEventListener?.('voiceschanged',loadVoices)}
-function voiceText(){if(!('speechSynthesis'in window))return'Trình duyệt này không có giọng đọc. Hãy mở bằng Safari hoặc Chrome.';if(zhVoice)return`Giọng đọc: <b>${esc(zhVoice.name)}</b>`;if(!voiceReady)return'Đang tìm giọng đọc tiếng Trung…';return'Máy chưa có giọng tiếng Trung. Trên iPad: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Trung (Trung Quốc đại lục) → tải giọng Tingting.'}
-function speak(text){if(!('speechSynthesis'in window)){toast('Thiết bị này chưa đọc được âm thanh');return}try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(disp(text));u.lang='zh-CN';if(zhVoice)u.voice=zhVoice;u.rate=state.rate;u.pitch=1;speechSynthesis.speak(u)}catch(e){}}
-
-/* ---------- state & sync ---------- */
-const LS='lingua-garden.v1';
-function norm(s){try{s=JSON.parse(JSON.stringify(s||{}))}catch(e){s={}}if(!s||typeof s!=='object')s={};return{lessons:s.lessons&&typeof s.lessons==='object'?s.lessons:{},games:s.games&&typeof s.games==='object'?s.games:{},saved:Array.isArray(s.saved)?s.saved.filter(x=>typeof x==='string'):[],days:Array.isArray(s.days)?s.days.filter(x=>typeof x==='string'):[],rate:typeof s.rate==='number'?s.rate:0.8}}
-function loadLocal(){try{return norm(JSON.parse(localStorage.getItem(LS)||'null'))}catch(e){return norm(null)}}
-function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
-function merge(a,b){const o=norm(a);for(const k in b.lessons){const x=o.lessons[k]||{},y=b.lessons[k]||{};o.lessons[k]={done:!!(x.done||y.done),best:Math.max(x.best||0,y.best||0)}}for(const k in b.games){const x=o.games[k]||{},y=b.games[k]||{};o.games[k]={best:Math.max(x.best||0,y.best||0),plays:Math.max(x.plays||0,y.plays||0)}}o.saved=[...new Set([...o.saved,...b.saved])];o.days=[...new Set([...o.days,...b.days])].sort();return o}
-let state=loadLocal();
-const cloud={ref:null,timer:null,chain:Promise.resolve()};
-function setSync(s){const el=$('#sync');if(!el)return;el.dataset.s=s;el.querySelector('span').textContent={cloud:'Đã đồng bộ',loading:'Đang đồng bộ…',local:'Lưu trên máy này',retry:'Chưa đồng bộ được'}[s]||''}
-function save(){saveLocal();pushCloud()}
-function pushCloud(){if(!cloud.ref)return;clearTimeout(cloud.timer);cloud.timer=setTimeout(()=>{const body=JSON.parse(JSON.stringify(state));setSync('loading');cloud.chain=cloud.chain.then(()=>cloud.ref.set(body)).then(()=>setSync('cloud')).catch(e=>setSync(e&&e.code==='invalid_argument'?'local':'retry'))},1200)}
-async function initCloud(){
-  if(!window.claude||typeof window.claude.use!=='function')return;
-  try{
-    const[db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
-    if(!db||!user)return;
-    const id=await user.id();if(!id)return;
-    cloud.ref=db.doc('data/users/'+id+'/progress');
-    setSync('loading');
-    const snap=await Promise.race([cloud.ref.get(),new Promise((_,r)=>setTimeout(()=>r({code:'timeout'}),10000))]);
-    if(snap.exists){const remote=norm(snap.data());const merged=merge(state,remote);const changed=JSON.stringify(merged)!==JSON.stringify(merge(remote,remote));state=merged;saveLocal();if(!QUIZ)render();if(changed)pushCloud();else setSync('cloud')}
-    else{pushCloud()}
-  }catch(e){setSync(cloud.ref?'retry':'local')}
-}
-function recordDay(){const t=ymd(new Date());if(!state.days.includes(t)){state.days.push(t);state.days.sort()}}
-function streak(){const set=new Set(state.days);const d=new Date();if(!set.has(ymd(d)))d.setDate(d.getDate()-1);let n=0;while(set.has(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
-
-/* ---------- icons ---------- */
-const ICON={
- play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
- star:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
- starFill:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" fill="currentColor"/></svg>',
- lock:'<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
- check:'<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-};
-const chip=(hz,py,vi)=>`<button class="chip" data-say="${esc(hz)}"><span class="hz">${esc(hz)}</span><span class="py">${colorPy(py)}</span>${vi?`<span class="vi">${esc(vi)}</span>`:''}</button>`;
-const saveBtn=hz=>{const on=state.saved.includes(hz);return`<button class="save ${on?'on':''}" data-act="save" data-hz="${esc(hz)}" aria-pressed="${on}" aria-label="${on?'Bỏ lưu':'Lưu từ'} ${esc(hz)}">${ICON.star}</button>`};
-const stars=n=>`<div class="stars" aria-label="${n} sao">${[1,2,3].map(k=>`<span class="${k<=n?'':'off'}">${ICON.starFill}</span>`).join('')}</div>`;
-function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
-
-/* ---------- question builders ---------- */
+/* ========== question builders ========== */
 const opt=(html,ok)=>({html,ok:!!ok});
-const qText=(prompt,right,wrongs,explain,extra={})=>({prompt,opts:shuffle([opt(right,1),...wrongs.map(w=>opt(w))]),explain,...extra});
+/* a lone lowercase pinyin word (e.g. èrshíwǔ) gets tone colours; Vietnamese/English text stays plain */
+function fmt(s){s=String(s);if(PYMARK.test(s)&&/^[a-züāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ']+$/.test(s))return`<span class="py">${colorPy(s)}</span>`;return hzWrap(s)}
+const qText=(prompt,right,wrongs,explain,extra={})=>({prompt:hzWrap(prompt),opts:shuffle([opt(fmt(right),1),...wrongs.map(w=>opt(fmt(w)))]),explain:explain?`<p class="small muted">${hzWrap(explain)}</p>`:'',...extra});
 function toneItem(){const[b,h,m]=pick(TS);const ts=[1,2,3,4].filter(t=>h[t-1]);const t=pick(ts);return{base:b,t,hz:h[t-1],vi:m[t-1],py:mark(b,t),all:ts}}
-function wordVariants(py,n){const parts=py.split(/([ ·])/);const idx=parts.map((p,i)=>(!p||p===' '||p==='·')?-1:i).filter(i=>i>=0);const out=new Set();let g=0;while(out.size<n&&g++<80){const p=parts.slice();const i=pick(idx);const{tone}=parse(p[i]);let t;do{t=Math.random()*5|0}while(t===tone);p[i]=retone(p[i],t);const s=disp(p.join(''));if(s!==disp(py))out.add(s)}return[...out]}
+function wordVariants(py,n){const parts=py.split(/([ ·])/);const idx=parts.map((p,i)=>(!p||p===' '||p==='·'||!/[a-zü]/i.test(parse(p).base))?-1:i).filter(i=>i>=0);const out=new Set();let g=0;while(out.size<n&&g++<100){const p=parts.slice();const i=pick(idx);const{tone}=parse(p[i]);let t;do{t=Math.random()*5|0}while(t===tone);p[i]=retone(p[i],t);const s=disp(p.join(''));if(s!==disp(py))out.add(s)}return[...out]}
 const pyOpt=s=>`<span class="py">${colorPy(s)}</span>`;
-const reveal=(hz,py,vi)=>`<div class="reveal"><button class="play" data-say="${esc(hz)}" aria-label="Nghe ${esc(hz)}">${ICON.play}</button><span class="hz">${esc(hz)}</span><span class="py">${colorPy(py)}</span><span class="muted">${esc(vi||'')}</span>${saveBtn(hz)}</div>`;
+const revealZh=(hz,py,vi,key)=>`<div class="reveal">${playZh(hz)}<span class="hz">${esc(hz)}</span><span class="py">${colorPy(py)}</span><span class="muted">${esc(vi||'')}</span>${saveBtn(key||hz)}</div>`;
+const revealEn=(w,vi,ex)=>`<div class="reveal">${playEn(w)}<b style="color:var(--navy);font-size:1.15rem">${esc(w)}</b><span class="muted">${esc(vi)}</span>${saveBtn('en:'+w)}</div>${ex?`<p class="small">${esc(ex)}</p>`:''}`;
 
 const Q={
- toneListen(){const it=toneItem();return{say:it.hz,prompt:'Nghe và chọn thanh điệu',opts:[1,2,3,4].map(t=>opt(toneLabel(t),t===it.t)),explain:reveal(it.hz,it.py,it.vi)}},
- sylListen(){const it=toneItem();const others=it.all.filter(t=>t!==it.t).map(t=>mark(it.base,t));while(others.length<3){const o=toneItem();const p=o.py;if(p!==it.py&&!others.includes(p))others.push(p)}return{say:it.hz,prompt:'Nghe và chọn âm tiết đúng',opts:shuffle([opt(pyOpt(it.py),1),...others.slice(0,3).map(p=>opt(pyOpt(p)))]),explain:reveal(it.hz,it.py,it.vi)}},
- pair(){const[a,b,tip]=pick(PAIRS);const side=Math.random()<.5;const[x,y]=side?[a,b]:[b,a];return{say:x[1],prompt:'Bạn nghe thấy âm nào?',opts:shuffle([opt(pyOpt(x[0]),1),opt(pyOpt(y[0]))]),explain:`${reveal(x[1],x[0],x[2])}<p class="small muted">${esc(tip)}</p>`}},
- initial(){const[i,g,hz,py,tip]=pick(INI);const same=INI.filter(r=>r[1]===g&&r[0]!==i).map(r=>r[0]);const rest=shuffle(INI.filter(r=>r[0]!==i&&!same.includes(r[0])).map(r=>r[0]));const w=[...shuffle(same),...rest].slice(0,3);return{say:hz,prompt:'Nghe và chọn thanh mẫu (âm đầu)',opts:shuffle([opt(pyOpt(i),1),...w.map(x=>opt(pyOpt(x)))]),explain:`${reveal(hz,py,'')}<p class="small muted"><b>${esc(i)}</b>: ${esc(tip)}</p>`}},
- final(){const[f,g,hz,py,tip]=pick(FIN);const w=sample(FIN.filter(r=>r[0]!==f).map(r=>r[0]),3);return{say:hz,prompt:'Nghe và chọn vận mẫu (phần vần)',opts:shuffle([opt(pyOpt(f),1),...w.map(x=>opt(pyOpt(x)))]),explain:`${reveal(hz,py,'')}<p class="small muted"><b>${esc(f)}</b> đọc ${esc(tip)}</p>`}},
- word(){const[hz,py,vi,tip]=pick(WORDS);return{say:hz,prompt:'Nghe rồi chọn cách viết Pinyin đúng',show:`<span class="hz">${esc(hz)}</span><span class="muted">${esc(vi)}</span>`,opts:shuffle([opt(pyOpt(disp(py)),1),...wordVariants(py,3).map(s=>opt(pyOpt(s)))]),explain:`${reveal(hz,py,vi)}${tip?`<p class="small muted">${esc(tip)}</p>`:''}`}},
+ toneListen(){const it=toneItem();return{say:it.hz,prompt:'Nghe và chọn thanh điệu',opts:[1,2,3,4].map(t=>opt(toneLabel(t),t===it.t)),explain:revealZh(it.hz,it.py,it.vi)}},
+ sylListen(){const it=toneItem();const others=it.all.filter(t=>t!==it.t).map(t=>mark(it.base,t));while(others.length<3){const p=toneItem().py;if(p!==it.py&&!others.includes(p))others.push(p)}return{say:it.hz,prompt:'Nghe và chọn âm tiết đúng',opts:shuffle([opt(pyOpt(it.py),1),...others.slice(0,3).map(p=>opt(pyOpt(p)))]),explain:revealZh(it.hz,it.py,it.vi)}},
+ pair(){const[a,b,tip]=pick(PAIRS);const side=Math.random()<.5;const[x,y]=side?[a,b]:[b,a];return{say:x[1],prompt:'Bạn nghe thấy âm nào?',opts:shuffle([opt(pyOpt(x[0]),1),opt(pyOpt(y[0]))]),explain:`${revealZh(x[1],x[0],x[2])}<p class="small muted">${esc(tip)}</p>`}},
+ initial(){const[i,g,hz,py,tip]=pick(INI);const same=INI.filter(r=>r[1]===g&&r[0]!==i).map(r=>r[0]);const rest=shuffle(INI.filter(r=>r[0]!==i&&!same.includes(r[0])).map(r=>r[0]));const w=[...shuffle(same),...rest].slice(0,3);return{say:hz,prompt:'Nghe và chọn thanh mẫu (âm đầu)',opts:shuffle([opt(pyOpt(i),1),...w.map(x=>opt(pyOpt(x)))]),explain:`${revealZh(hz,py,'')}<p class="small muted"><b>${esc(i)}</b>: ${esc(tip)}</p>`}},
+ final(){const[f,g,hz,py,tip]=pick(FIN);const w=sample(FIN.filter(r=>r[0]!==f).map(r=>r[0]),3);return{say:hz,prompt:'Nghe và chọn vận mẫu (phần vần)',opts:shuffle([opt(pyOpt(f),1),...w.map(x=>opt(pyOpt(x)))]),explain:`${revealZh(hz,py,'')}<p class="small muted"><b>${esc(f)}</b> đọc ${esc(tip)}</p>`}},
+ word(){const[hz,py,vi,tip]=pick(WORDS);return{say:hz,prompt:'Nghe rồi chọn cách viết Pinyin đúng',show:`<span class="hz">${esc(hz)}</span><span class="muted">${esc(vi)}</span>`,opts:shuffle([opt(pyOpt(disp(py)),1),...wordVariants(py,3).map(s=>opt(pyOpt(s)))]),explain:`${revealZh(hz,py,vi)}${tip?`<p class="small muted">${esc(tip)}</p>`:''}`}},
  markPlace(){const bases=[...TS.map(r=>r[0]),'liu','dui','xue','lü','gou','jiao','shui','zhuang','niu','mei','kuai','xiong','tou','jiu','gui','lüe'];const b=pick(bases);const t=1+(Math.random()*4|0);const k=markIndex(b);const row=TS.find(r=>r[0]===b);const hz=row&&row[1][t-1];return{prompt:`Đặt dấu ${TONE_NAME[t].toLowerCase()} vào chữ nào?`,show:`<span class="py">${esc(b)}</span><span class="tone t${t}">${contour(t)}<b>${TONE_NAME[t]}</b></span>`,optsClass:'letters',opts:[...b].map((ch,i)=>opt(esc(ch),i===k)),after:hz||null,explain:`<div class="reveal"><span class="py" style="font-size:2rem">${colorPy(mark(b,t))}</span>${hz?`<span class="hz">${hz}</span><span class="muted">${esc(row[2][t-1])}</span>${saveBtn(hz)}`:''}</div><p class="small muted">Quy tắc: có <b>a</b> thì đặt trên a; không có a thì tìm <b>e</b> hoặc <b>o</b>; gặp <b>iu</b> / <b>ui</b> thì đặt trên chữ đứng sau.</p>`}},
- build(){const INIT=['zh','ch','sh','b','p','m','f','d','t','n','l','g','k','h','j','q','x','r','z','c','s'];let it;do{it=toneItem()}while(/^[yw]/.test(it.base));const ini=INIT.find(i=>it.base.startsWith(i));const fin=it.base.slice(ini.length);const finals=[...new Set(FIN.map(r=>r[0]).filter(f=>f!=='er'))];return{type:'build',say:it.hz,prompt:'Nghe rồi ghép âm tiết: chọn âm đầu, vần và thanh',ans:{ini,fin,t:it.t},choices:{ini:shuffle([ini,...sample(INIT.filter(x=>x!==ini),3)]),fin:shuffle([fin,...sample(finals.filter(x=>x!==fin),3)]),t:[1,2,3,4]},explain:reveal(it.hz,it.py,it.vi)}}
+ build(){const INIT=['zh','ch','sh','b','p','m','f','d','t','n','l','g','k','h','j','q','x','r','z','c','s'];let it;do{it=toneItem()}while(/^[yw]/.test(it.base));const ini=INIT.find(i=>it.base.startsWith(i));const fin=it.base.slice(ini.length);const finals=[...new Set(FIN.map(r=>r[0]).filter(f=>f!=='er'))];return{type:'build',say:it.hz,prompt:'Nghe rồi ghép âm tiết: chọn âm đầu, vần và thanh',ans:{ini,fin,t:it.t},choices:{ini:shuffle([ini,...sample(INIT.filter(x=>x!==ini),3)]),fin:shuffle([fin,...sample(finals.filter(x=>x!==fin),3)]),t:[1,2,3,4]},explain:revealZh(it.hz,it.py,it.vi)}}
 };
 const many=(fn,n)=>Array.from({length:n},()=>fn());
-function uniq(fn,n){const out=[],seen=new Set();let g=0;while(out.length<n&&g++<200){const q=fn();const key=(q.say||'')+q.prompt+(q.show||'');if(!seen.has(key)){seen.add(key);out.push(q)}}return out}
+function uniq(fn,n){const out=[],seen=new Set();let g=0;while(out.length<n&&g++<200){const q=fn();const key=(q.say||q.sayEn||'')+q.prompt+(q.show||'');if(!seen.has(key)){seen.add(key);out.push(q)}}return out}
+const enPair=(a,b,tip)=>{const side=Math.random()<.5;const[x,y]=side?[a,b]:[b,a];return{sayEn:x,prompt:'Bạn nghe thấy từ nào?',opts:shuffle([opt(`<b>${esc(x)}</b>`,1),opt(`<b>${esc(y)}</b>`)]),explain:`<div class="reveal">${playEn(x)}<b>${esc(x)}</b><span class="muted">·</span>${playEn(y)}<span>${esc(y)}</span></div>${tip?`<p class="small muted">${esc(tip)}</p>`:''}`}};
 
-/* ---------- lessons (Level 1: Pinyin Foundation) ---------- */
+/* ========== PHASE 1 · Chinese pinyin lessons ========== */
 const sndCard=(big,hz,py,tip)=>`<button class="snd" data-say="${esc(hz)}"><span class="top-line"><span class="big">${esc(big)}</span><span class="ex"><span class="hz">${esc(hz)}</span> <span class="py">${colorPy(py)}</span></span></span><span class="tip">${esc(tip)}</span></button>`;
+const sndEn=(big,word,tip)=>`<button class="snd en" data-say-en="${esc(word)}"><span class="top-line"><span class="big">${esc(big)}</span><span class="ex"><b>${esc(word)}</b></span></span><span class="tip">${esc(tip)}</span></button>`;
 function groupBy(rows){const m=new Map();rows.forEach(r=>{if(!m.has(r[1]))m.set(r[1],[]);m.get(r[1]).push(r)});return[...m]}
-const LESSONS=[
+const ZHP=[
  {t:'Làm quen với Pinyin',d:'Pinyin là gì, gồm những phần nào',
   learn:()=>`
   <p>Pinyin (<span class="hz">拼音</span> <span class="py">${colorPy('pīn·yīn')}</span>, nghĩa là “ghép âm”) là cách ghi cách đọc tiếng Trung bằng chữ cái Latin. Trẻ em Trung Quốc học Pinyin trước khi học chữ, và mọi người dùng nó để gõ chữ Hán trên điện thoại.</p>
@@ -470,28 +511,27 @@ const LESSONS=[
   <p>Bấm vào từng ô để nghe:</p>
   <div class="chips">${chip('妈','mā','mẹ')}${chip('好','hǎo','tốt')}${chip('你','nǐ','bạn')}${chip('中','zhōng','giữa')}</div>
   <div class="note"><h3>Vì sao học Pinyin trước?</h3><ul><li>Đọc được mọi từ mới trong từ điển, không cần ai đọc mẫu.</li><li>Phát âm đúng ngay từ đầu, đỡ phải sửa tật về sau.</li><li>Gõ được chữ Hán trên iPad bằng bàn phím Pinyin.</li></ul></div>
-  <div class="note warn"><h3>Lưu ý cho người Việt</h3><p>Pinyin dùng chữ Latin nhưng <b>không đọc như tiếng Việt</b>: <b>c</b> đọc gần “ts”, <b>zh</b> gần “tr”, <b>d</b> gần “t”, <b>t</b> gần “th”. Các bài sau sẽ đi từng âm.</p></div>`,
+  <div class="note warn"><h3>Lưu ý cho người Việt</h3><p>Pinyin dùng chữ Latin nhưng <b>không đọc như tiếng Việt</b>: <b>c</b> đọc gần “ts”, <b>zh</b> gần “tr”, <b>d</b> gần “t”, <b>t</b> gần “th”.</p></div>`,
   quiz:()=>shuffle([
    qText('Pinyin là gì?','Cách ghi âm tiếng Trung bằng chữ Latin',['Một kiểu chữ Hán','Một phương ngữ','Bảng chữ cái tiếng Anh']),
-   qText(`Trong <span class="py">${colorPy('mā')}</span>, thanh mẫu (âm đầu) là?`,pyOpt('m'),[pyOpt('a'),pyOpt('ā'),pyOpt('ma')]),
-   qText(`Phần <span class="py">ao</span> trong <span class="py">${colorPy('hǎo')}</span> gọi là gì?`,'Vận mẫu (vần)',['Thanh mẫu','Thanh điệu','Bộ thủ']),
-   qText(`Dấu <b>ˇ</b> trên <span class="py">${colorPy('hǎo')}</span> cho biết điều gì?`,'Thanh điệu: thanh 3',['Đọc kéo dài','Âm này viết hoa','Đây là từ mượn']),
-   qText('Pinyin dùng để làm gì?','Học phát âm và gõ chữ Hán',['Thay hẳn chữ Hán khi viết','Chỉ dùng cho tên riêng','Chỉ dùng ở Đài Loan']),
+   {prompt:`Trong <span class="py">${colorPy('mā')}</span>, thanh mẫu (âm đầu) là?`,opts:shuffle([opt(pyOpt('m'),1),opt(pyOpt('a')),opt(pyOpt('ā')),opt(pyOpt('ma'))])},
+   {prompt:`Phần <span class="py">ao</span> trong <span class="py">${colorPy('hǎo')}</span> gọi là gì?`,opts:shuffle([opt('Vận mẫu (vần)',1),opt('Thanh mẫu'),opt('Thanh điệu'),opt('Bộ thủ')])},
+   {prompt:`Dấu <b>ˇ</b> trên <span class="py">${colorPy('hǎo')}</span> cho biết điều gì?`,opts:shuffle([opt('Thanh điệu: thanh 3',1),opt('Đọc kéo dài'),opt('Âm này viết hoa'),opt('Đây là từ mượn')])},
    qText('Tiếng phổ thông có mấy thanh điệu chính?','4 thanh (cộng thêm thanh nhẹ)',['6 thanh','2 thanh','8 thanh'])
   ])},
  {t:'21 thanh mẫu',d:'Âm đầu, chia theo vị trí phát âm',
   learn:()=>`
-  <p>Thanh mẫu là âm đầu của âm tiết. Có 21 thanh mẫu, chia thành 6 nhóm theo chỗ đặt lưỡi và môi. Không cần nhớ hết một lần: nghe từng nhóm, bắt chước, rồi qua nhóm sau.</p>
+  <p>Thanh mẫu là âm đầu của âm tiết. Có 21 thanh mẫu, chia thành 6 nhóm theo chỗ đặt lưỡi và môi. Nghe từng nhóm, bắt chước, rồi qua nhóm sau.</p>
   <p class="small muted">Mỗi ô đọc một chữ ví dụ, vì phụ âm đứng một mình rất khó nghe.</p>
   ${groupBy(INI).map(([g,rows])=>`<div class="group"><h3>${esc(g)}<small>${rows.map(r=>r[0]).join(' · ')}</small></h3><div class="sound">${rows.map(r=>sndCard(r[0],r[2],r[3],r[4])).join('')}</div></div>`).join('')}
   <div class="note"><h3>Điểm hay nhầm</h3><p>Trong <b>zhi, chi, shi, ri, zi, ci, si</b>, chữ <b>i</b> không đọc là “i”. Bạn chỉ kéo dài âm đầu, nghe gần như “ư”: <span class="py">zi</span> ≈ “chư” nhẹ, <span class="py">si</span> ≈ “xư”.</p></div>`,
-  quiz:()=>uniq(Q.initial,6)},
+  quiz:()=>uniq(Q.initial,4)},
  {t:'Vận mẫu',d:'Phần vần: đơn, kép, mũi',
   learn:()=>`
   <p>Vận mẫu là phần vần. Bắt đầu với 6 vận mẫu đơn, sau đó ghép thành vần kép và vần mũi. Phần lớn có âm gần với vần tiếng Việt.</p>
   ${groupBy(FIN).map(([g,rows])=>`<div class="group"><h3>${esc(g)}<small>${rows.length} vần</small></h3><div class="sound">${rows.map(r=>sndCard(r[0],r[2],r[3],r[4])).join('')}</div></div>`).join('')}
   <div class="note"><h3>Ba vần cần chú ý</h3><ul><li><b>e</b> không đọc “e” mà gần “ơ”.</li><li><b>ü</b>: chu môi tròn rồi đọc “i”.</li><li><b>-n</b> và <b>-ng</b> khác nghĩa: <span class="py">${colorPy('fàn')}</span> (cơm) và <span class="py">${colorPy('fàng')}</span> (đặt).</li></ul></div>`,
-  quiz:()=>uniq(Q.final,6)},
+  quiz:()=>uniq(Q.final,4)},
  {t:'Ghép thanh mẫu và vận mẫu',d:'Quy tắc viết y, w, ü',
   learn:()=>`
   <p>Ghép âm đầu với vần: <span class="py">b + a = ba</span>, <span class="py">h + ao = hao</span>, <span class="py">zh + ong = zhong</span>. Chỉ có vài quy tắc viết cần biết:</p>
@@ -503,16 +543,13 @@ const LESSONS=[
   </ol>
   <div class="chips">${chip('六','liù','sáu')}${chip('对','duì','đúng')}${chip('春','chūn','mùa xuân')}${chip('去','qù','đi')}${chip('女','nǚ','nữ')}${chip('月','yuè','tháng')}</div>`,
   quiz:()=>sample([
-   qText('j + ü viết thành?',pyOpt('ju'),[pyOpt('jü'),pyOpt('jiu'),pyOpt('jv')],'ü sau j, q, x, y bỏ hai chấm.'),
-   qText('n + ü viết thành?',pyOpt('nü'),[pyOpt('nu'),pyOpt('nyu'),pyOpt('niu')],'Sau n và l, ü giữ hai chấm để phân biệt với u.'),
-   qText('Vần i đứng một mình viết là?',pyOpt('yi'),[pyOpt('i'),pyOpt('yii'),pyOpt('wi')]),
-   qText('Vần uan không có âm đầu viết là?',pyOpt('wan'),[pyOpt('uan'),pyOpt('yuan'),pyOpt('wuan')]),
-   qText('l + iou viết thành?',pyOpt('liu'),[pyOpt('liou'),pyOpt('lio'),pyOpt('lu')],'iou viết tắt thành iu.'),
-   qText('d + uei viết thành?',pyOpt('dui'),[pyOpt('duei'),pyOpt('dei'),pyOpt('dwi')],'uei viết tắt thành ui.'),
-   qText('x + üe viết thành?',pyOpt('xue'),[pyOpt('xüe'),pyOpt('xie'),pyOpt('xyue')]),
-   qText('Dấu thanh của hao đặt ở đâu?',pyOpt('hǎo'),[pyOpt('haǒ'),pyOpt('hǎǒ'),pyOpt('hao̐')],'Có a thì đặt dấu trên a.'),
-   qText('Dấu thanh của liu (thanh 4) đặt ở đâu?',pyOpt('liù'),[pyOpt('lìu'),pyOpt('lìù'),pyOpt('liu')],'Gặp iu thì đặt trên chữ đứng sau.')
-  ],6)},
+   {prompt:'j + ü viết thành?',opts:shuffle([opt(pyOpt('ju'),1),opt(pyOpt('jü')),opt(pyOpt('jiu')),opt(pyOpt('jv'))]),explain:'<p class="small muted">ü sau j, q, x, y bỏ hai chấm.</p>'},
+   {prompt:'n + ü viết thành?',opts:shuffle([opt(pyOpt('nü'),1),opt(pyOpt('nu')),opt(pyOpt('nyu')),opt(pyOpt('niu'))]),explain:'<p class="small muted">Sau n và l, ü giữ hai chấm để phân biệt với u.</p>'},
+   {prompt:'Vần uan không có âm đầu viết là?',opts:shuffle([opt(pyOpt('wan'),1),opt(pyOpt('uan')),opt(pyOpt('yuan')),opt(pyOpt('wuan'))])},
+   {prompt:'l + iou viết thành?',opts:shuffle([opt(pyOpt('liu'),1),opt(pyOpt('liou')),opt(pyOpt('lio')),opt(pyOpt('lu'))])},
+   {prompt:'d + uei viết thành?',opts:shuffle([opt(pyOpt('dui'),1),opt(pyOpt('duei')),opt(pyOpt('dei')),opt(pyOpt('dwi'))])},
+   {prompt:'Dấu thanh 4 của liu đặt ở đâu?',opts:shuffle([opt(pyOpt('liù'),1),opt(pyOpt('lìu')),opt(pyOpt('liu'))]),explain:'<p class="small muted">Gặp iu thì đặt trên chữ đứng sau.</p>'}
+  ],4)},
  {t:'Bốn thanh điệu',d:'Cao đều, đi lên, xuống rồi lên, rơi xuống',
   learn:()=>`
   <p>Tiếng Việt có 6 thanh, tiếng Trung có 4 thanh chính. Đổi thanh là đổi nghĩa: <span class="py">${colorPy('mā')}</span> là mẹ, <span class="py">${colorPy('mǎ')}</span> là ngựa.</p>
@@ -522,216 +559,476 @@ const LESSONS=[
   <p>Nghe thêm các bộ bốn thanh:</p>
   <div class="chips">${['ba','tang','shi','tu'].map(b=>{const r=TS.find(x=>x[0]===b);return r[1].map((h,i)=>chip(h,mark(b,i+1),r[2][i])).join('')}).join('')}</div>
   <div class="note"><p>Mẹo: vừa đọc vừa vẽ đường thanh bằng tay trong không khí. Tay đi lên thì giọng đi lên.</p></div>`,
-  quiz:()=>many(Q.toneListen,6)},
+  quiz:()=>many(Q.toneListen,4)},
  {t:'Thanh nhẹ',d:'Âm đọc ngắn, nhẹ, không dấu',
   learn:()=>`
   <p>Thanh nhẹ (<span class="hz">轻声</span>) là âm đọc ngắn và nhẹ, <b>không có dấu</b>. Thường gặp ở chữ lặp lại trong từ gia đình, trợ từ cuối câu và chữ thứ hai trong một số từ quen thuộc.</p>
   <div class="chips">${chip('妈妈','mā·ma','mẹ')}${chip('爸爸','bà·ba','bố')}${chip('谢谢','xiè·xie','cảm ơn')}${chip('朋友','péng·you','bạn bè')}${chip('好吗','hǎo ma','được không?')}${chip('我的','wǒ de','của tôi')}</div>
-  <div class="note"><p>Cao độ của thanh nhẹ phụ thuộc vào chữ đứng trước. Bạn không cần tính toán: chỉ cần đọc thật nhẹ, nhanh, như nói lướt qua.</p></div>`,
+  <div class="note"><p>Cao độ của thanh nhẹ phụ thuộc vào chữ đứng trước. Chỉ cần đọc thật nhẹ, nhanh, như nói lướt qua.</p></div>`,
   quiz:()=>sample([
    {say:'谢谢',prompt:'Nghe rồi chọn cách viết đúng',opts:shuffle([opt(pyOpt('xièxie'),1),opt(pyOpt('xièxiè')),opt(pyOpt('xiéxie')),opt(pyOpt('xiēxiē'))])},
    {say:'妈妈',prompt:'Nghe rồi chọn cách viết đúng',opts:shuffle([opt(pyOpt('māma'),1),opt(pyOpt('māmā')),opt(pyOpt('máma')),opt(pyOpt('màma'))])},
    {say:'爸爸',prompt:'Nghe rồi chọn cách viết đúng',opts:shuffle([opt(pyOpt('bàba'),1),opt(pyOpt('bāba')),opt(pyOpt('bàbà')),opt(pyOpt('bǎba'))])},
    {say:'朋友',prompt:'Nghe rồi chọn cách viết đúng',opts:shuffle([opt(pyOpt('péngyou'),1),opt(pyOpt('pēngyou')),opt(pyOpt('pèngyōu')),opt(pyOpt('pěngyóu'))])},
-   qText('Thanh nhẹ được ghi thế nào?','Không có dấu',['Dấu chấm phía trên','Dấu ngã','Viết in hoa']),
-   qText(`Chữ <span class="hz">吗</span> (trợ từ hỏi) viết là?`,pyOpt('ma'),[pyOpt('mā'),pyOpt('mǎ'),pyOpt('mà')]),
-   qText(`Trong <span class="py">${colorPy('mā·ma')}</span>, chữ ma thứ hai đọc thế nào?`,'Ngắn và nhẹ',['Kéo dài, cao đều','Rơi mạnh như thanh 4','Xuống rồi lên như thanh 3'])
-  ],6)},
+   qText('Thanh nhẹ được ghi thế nào?','Không có dấu',['Dấu chấm phía trên','Dấu ngã','Viết in hoa'])
+  ],4)},
  {t:'Biến điệu',d:'Thanh 3 gặp thanh 3, 不 và 一',
   learn:()=>`
   <p>Khi nói liền, một vài thanh tự đổi cho dễ đọc. Chỉ có 3 quy tắc cần nhớ:</p>
   <ol>
-   <li><b>Thanh 3 + thanh 3</b> → chữ đầu đọc thành thanh 2. <span class="py">${colorPy('nǐ hǎo')}</span> đọc là <span class="py">${colorPy('ní hǎo')}</span>. Ngoài ra, thanh 3 đứng trước thanh khác thường chỉ đọc nửa đầu (xuống thấp, không lên lại).</li>
+   <li><b>Thanh 3 + thanh 3</b> → chữ đầu đọc thành thanh 2. <span class="py">${colorPy('nǐ hǎo')}</span> đọc là <span class="py">${colorPy('ní hǎo')}</span>.</li>
    <li><b>不 bù</b> + thanh 4 → <span class="py">${colorPy('bú')}</span>. Ví dụ <span class="py">${colorPy('bú shì')}</span> (không phải). Trước thanh 1, 2, 3 giữ <span class="py">${colorPy('bù')}</span>.</li>
-   <li><b>一 yī</b> + thanh 4 → <span class="py">${colorPy('yí')}</span> (<span class="py">${colorPy('yí gè')}</span>); + thanh 1, 2, 3 → <span class="py">${colorPy('yì')}</span> (<span class="py">${colorPy('yì tiān')}</span>). Đếm số hay đứng cuối thì vẫn là <span class="py">${colorPy('yī')}</span>.</li>
+   <li><b>一 yī</b> + thanh 4 → <span class="py">${colorPy('yí')}</span> (<span class="py">${colorPy('yí gè')}</span>); + thanh 1, 2, 3 → <span class="py">${colorPy('yì')}</span> (<span class="py">${colorPy('yì tiān')}</span>). Đếm số thì vẫn là <span class="py">${colorPy('yī')}</span>.</li>
   </ol>
-  <div class="chips">${chip('你好','ní hǎo','xin chào')}${chip('很好','hén hǎo','rất tốt')}${chip('不是','bú shì','không phải')}${chip('不好','bù hǎo','không tốt')}${chip('一个','yí gè','một cái')}${chip('一天','yì tiān','một ngày')}</div>
-  <p class="small muted">Sách và từ điển thường vẫn ghi dấu gốc (nǐ hǎo). Biến điệu là cách đọc, bạn sẽ quen dần khi nghe nhiều.</p>`,
+  <div class="chips">${chip('你好','ní hǎo','xin chào')}${chip('很好','hén hǎo','rất tốt')}${chip('不是','bú shì','không phải')}${chip('不好','bù hǎo','không tốt')}${chip('一个','yí gè','một cái')}${chip('一天','yì tiān','một ngày')}</div>`,
   quiz:()=>sample([
-   qText(`<span class="hz">你好</span> (nǐ + hǎo) thực tế đọc là?`,pyOpt('ní hǎo'),[pyOpt('nǐ hǎo (đủ hai thanh 3)'),pyOpt('nì hǎo'),pyOpt('nǐ háo')]),
-   qText(`<span class="hz">不是</span> (bù + shì) đọc là?`,pyOpt('bú shì'),[pyOpt('bù shì'),pyOpt('bū shì'),pyOpt('bǔ shì')]),
-   qText(`<span class="hz">一个</span> (yī + gè) đọc là?`,pyOpt('yí gè'),[pyOpt('yī gè'),pyOpt('yì gè'),pyOpt('yǐ gè')]),
-   qText(`<span class="hz">一天</span> (yī + tiān) đọc là?`,pyOpt('yì tiān'),[pyOpt('yí tiān'),pyOpt('yī tiān'),pyOpt('yǐ tiān')]),
-   qText(`<span class="hz">很好</span> (hěn + hǎo) đọc là?`,pyOpt('hén hǎo'),[pyOpt('hěn háo'),pyOpt('hèn hǎo'),pyOpt('hēn hǎo')]),
-   qText(`<span class="hz">不好</span> (bù + hǎo) đọc là?`,pyOpt('bù hǎo'),[pyOpt('bú hǎo'),pyOpt('bú háo'),pyOpt('bū hǎo')],'Trước thanh 3, 不 giữ nguyên thanh 4.'),
-   qText(`<span class="hz">水果</span> (shuǐ + guǒ) đọc là?`,pyOpt('shuí guǒ'),[pyOpt('shuǐ guó'),pyOpt('shuì guǒ'),pyOpt('shuī guǒ')]),
-   qText('Đếm “một, hai, ba”, chữ 一 đọc là?',pyOpt('yī'),[pyOpt('yí'),pyOpt('yì'),pyOpt('yǐ')])
-  ],6)},
+   {prompt:'<span class="hz">你好</span> (nǐ + hǎo) thực tế đọc là?',opts:shuffle([opt(pyOpt('ní hǎo'),1),opt(pyOpt('nì hǎo')),opt(pyOpt('nǐ háo')),opt(pyOpt('nī hǎo'))])},
+   {prompt:'<span class="hz">不是</span> (bù + shì) đọc là?',opts:shuffle([opt(pyOpt('bú shì'),1),opt(pyOpt('bù shì')),opt(pyOpt('bū shì')),opt(pyOpt('bǔ shì'))])},
+   {prompt:'<span class="hz">一个</span> (yī + gè) đọc là?',opts:shuffle([opt(pyOpt('yí gè'),1),opt(pyOpt('yī gè')),opt(pyOpt('yì gè')),opt(pyOpt('yǐ gè'))])},
+   {prompt:'<span class="hz">一天</span> (yī + tiān) đọc là?',opts:shuffle([opt(pyOpt('yì tiān'),1),opt(pyOpt('yí tiān')),opt(pyOpt('yī tiān')),opt(pyOpt('yǐ tiān'))])},
+   {prompt:'<span class="hz">不好</span> (bù + hǎo) đọc là?',opts:shuffle([opt(pyOpt('bù hǎo'),1),opt(pyOpt('bú hǎo')),opt(pyOpt('bū hǎo')),opt(pyOpt('bú háo'))]),explain:'<p class="small muted">Trước thanh 3, 不 giữ nguyên thanh 4.</p>'}
+  ],4)},
  {t:'Nghe và nhận diện âm',d:'Nghe trước, đoán sau',
   learn:()=>`
   <p>Khi nghe một âm tiết lạ, hãy tách làm ba bước: <b>thanh</b> đi lên hay xuống? → <b>âm đầu</b> có bật hơi không? → <b>vần</b> mở hay khép?</p>
-  <div class="card" id="quick"><h3>Nghe nhanh</h3><p class="small muted">Bấm “Phát âm ngẫu nhiên”, tự đoán trong đầu rồi bấm “Xem đáp án”.</p><div class="row"><button class="play" data-act="quick">${ICON.play}<span>Phát âm ngẫu nhiên</span></button><button class="btn" data-act="quickShow" id="quickShow" disabled>Xem đáp án</button></div><div id="quickAns"></div></div>
-  <p>Một vài bộ để luyện tai:</p>
+  <div class="card"><h3>Nghe nhanh</h3><p class="small muted">Bấm “Phát âm ngẫu nhiên”, tự đoán trong đầu rồi bấm “Xem đáp án”.</p><div class="row"><button class="play" data-act="quick">${ICON.play}<span>Phát âm ngẫu nhiên</span></button><button class="btn" data-act="quickShow" id="quickShow" disabled>Xem đáp án</button></div><div id="quickAns"></div></div>
   <div class="chips">${['ji','qi','xi'].map(b=>{const r=TS.find(x=>x[0]===b);return r[1].map((h,i)=>chip(h,mark(b,i+1),r[2][i])).join('')}).join('')}</div>`,
-  quiz:()=>uniq(Q.sylListen,6)},
+  quiz:()=>uniq(Q.sylListen,4)},
  {t:'Phân biệt âm dễ nhầm',d:'zh/z, j/q/x, -n/-ng, ü/u…',
   learn:()=>`
   <p>Đây là những cặp âm người Việt hay nhầm nhất. Nghe từng cặp, chú ý vị trí lưỡi và môi.</p>
   <div class="pairs">${PAIRS.map(([a,b,tip])=>`<div class="pair"><div class="chips">${chip(a[1],a[0],a[2])}${chip(b[1],b[0],b[2])}</div><p>${esc(tip)}</p></div>`).join('')}</div>`,
-  quiz:()=>uniq(Q.pair,6)},
+  quiz:()=>uniq(Q.pair,4)},
  {t:'Luyện đọc âm tiết',d:'Đọc những từ đầu tiên',
   learn:()=>`
   <p>Giờ bạn đã đọc được Pinyin. Nghe từng từ, đọc theo, và bấm ngôi sao để lưu vào Sổ từ.</p>
-  <div class="words">${WORDS.map(([hz,py,vi,tip])=>`<div class="wrow"><button class="playw" data-say="${esc(hz)}" aria-label="Nghe ${esc(hz)}">${ICON.play}</button><span class="hz">${esc(hz)}</span><div class="tx"><span class="py">${colorPy(py)}</span><small>${esc(vi)}${tip?' · '+esc(tip):''}</small></div>${saveBtn(hz)}</div>`).join('')}</div>`,
-  quiz:()=>uniq(Q.word,6)}
-];
-const LEVELS=[
- {n:2,t:'Từ vựng cơ bản',items:['Chào hỏi','Số đếm','Gia đình','Đồ ăn & đồ uống','Hoạt động hằng ngày','Thời gian & ngày tháng','Mua sắm','Công việc & văn phòng']},
- {n:3,t:'Ngữ pháp & mẫu câu',items:['Cấu trúc câu cơ bản','Đại từ','Câu hỏi','Câu phủ định','Mẫu câu giao tiếp thông dụng']},
- {n:4,t:'Làm quen chữ Hán',items:['Nhận diện chữ','Bộ thủ','Cấu tạo chữ','Thứ tự nét','Tập viết chữ phổ biến']},
- {n:5,t:'Nghe & nói',items:['Nghe câu ngắn','Nghe rồi lặp lại','Đoán ý nghĩa','Hội thoại theo tình huống']}
-];
-const GAMES=[
- {id:'tone',t:'Bắt thanh điệu',d:'Nghe một chữ, chọn đúng 1 trong 4 thanh.',art:`<span class="t1">ā</span><span class="t2">á</span><span class="t3">ǎ</span><span class="t4">à</span>`,make:()=>many(Q.toneListen,10)},
- {id:'pairs',t:'Đôi tai tinh',d:'Nghe và chọn giữa hai âm rất giống nhau.',art:`<span>zh</span><span class="muted">/</span><span>z</span>`,make:()=>uniq(Q.pair,10)},
- {id:'build',t:'Ghép âm tiết',d:'Nghe rồi tự ghép âm đầu + vần + thanh.',art:`<span>b</span><span class="muted">+</span><span>a</span><span class="muted">+</span><span class="t4">ˋ</span>`,make:()=>uniq(Q.build,10)},
- {id:'mark',t:'Đặt dấu thanh',d:'Chọn đúng chữ cái mang dấu. Không cần âm thanh.',art:`<span>h</span><span class="t3">ǎ</span><span>o</span>`,make:()=>uniq(Q.markPlace,10)},
- {id:'words',t:'Đọc từ đầu tiên',d:'Nghe một từ, chọn Pinyin đúng thanh.',art:`<span class="hz">你好</span>`,make:()=>uniq(Q.word,10)}
+  <div class="words">${WORDS.map(([hz,py,vi,tip])=>`<div class="wrow">${playZh(hz)}<span class="hz">${esc(hz)}</span><div class="tx"><span class="py">${colorPy(py)}</span><small>${esc(vi)}${tip?' · '+esc(tip):''}</small></div>${saveBtn(hz)}</div>`).join('')}</div>`,
+  quiz:()=>uniq(Q.word,4)}
 ];
 
-/* ---------- progress helpers ---------- */
-const isDone=n=>!!(state.lessons[n]&&state.lessons[n].done);
-const unlocked=n=>n===1||isDone(n-1);
-const doneCount=()=>LESSONS.filter((_,i)=>isDone(i+1)).length;
-const nextLesson=()=>{for(let n=1;n<=LESSONS.length;n++)if(!isDone(n))return n;return null};
-function plant(n){const h=14+n*7;let leaves='';for(let k=0;k<Math.min(n,9);k++){const y=100-12-k*7;const s=k%2?1:-1;leaves+=`<path d="M60 ${y} q ${s*14} -11 ${s*24} -3 q ${-s*11} 9 ${-s*24} 3z" fill="var(--jade)" opacity="${.55+k*.05}"/>`}const flower=n>=LESSONS.length?`<g transform="translate(60 ${100-h})">${[0,72,144,216,288].map(a=>`<ellipse rx="5" ry="9" transform="rotate(${a}) translate(0 -8)" fill="var(--seal)"/>`).join('')}<circle r="5" fill="var(--gold)"/></g>`:`<circle cx="60" cy="${100-h}" r="3.5" fill="var(--jade)"/>`;return`<svg class="plant" viewBox="0 0 120 110" aria-hidden="true"><path d="M28 101h64" stroke="var(--line)" stroke-width="4" stroke-linecap="round"/><path d="M60 100V${100-h}" stroke="var(--jade)" stroke-width="3" stroke-linecap="round"/>${leaves}${flower}</svg>`}
+/* ========== PHASE 1 · English pronunciation lessons ========== */
+const EN_SHORT=[['ship','sheep','/ɪ/ ngắn, thả lỏng · /iː/ dài, miệng cười'],['live','leave','/ɪ/ – /iː/'],['sit','seat','/ɪ/ – /iː/'],['full','fool','/ʊ/ ngắn · /uː/ dài, môi tròn'],['pull','pool','/ʊ/ – /uː/'],['bad','bed','/æ/ mở to miệng · /e/ như “e” tiếng Việt'],['man','men','/æ/ – /e/'],['cut','cart','/ʌ/ ngắn như “ă” · /ɑː/ dài như “a” kéo'],['hut','heart','/ʌ/ – /ɑː/']];
+const EN_END=[['bag','back','/g/ có rung · /k/ bật nhẹ, không rung'],['card','cart','/d/ – /t/'],['price','prize','/s/ không rung · /z/ rung như ong kêu'],['rice','rise','/s/ – /z/'],['cap','cab','/p/ – /b/'],['white','wide','/t/ – /d/']];
+const EN_CONS=[['think','sink','/θ/: đặt lưỡi giữa hai hàm răng rồi thổi hơi'],['three','tree','/θ/ không phải “th” tiếng Việt'],['they','day','/ð/: lưỡi giữa hai răng, có rung'],['she','see','/ʃ/ chu môi · /s/ môi dẹt'],['chair','share','/tʃ/ bật như “ch” · /ʃ/ xì kéo dài'],['joke','choke','/dʒ/ có rung · /tʃ/ không rung'],['vest','best','/v/ răng trên chạm môi dưới · /b/ hai môi']];
+const ENP=[
+ {t:'Bảng phiên âm IPA',d:'Đọc phiên âm trong từ điển',
+  learn:()=>`
+  <p>Tiếng Anh viết một đằng đọc một nẻo. <b>IPA</b> (bảng phiên âm quốc tế) ghi đúng cách đọc của từng từ, giống vai trò của Pinyin với tiếng Trung. Tiếng Anh có <b>44 âm</b>: 20 nguyên âm và 24 phụ âm.</p>
+  <p>Bấm để nghe những từ người học hay đọc sai vì nhìn chữ:</p>
+  <div class="chips">${enChip('receipt','/rɪˈsiːt/','biên lai · p câm')}${enChip('debt','/det/','khoản nợ · b câm')}${enChip('Wednesday','/ˈwenzdeɪ/','thứ Tư')}${enChip('island','/ˈaɪlənd/','hòn đảo · s câm')}${enChip('comfortable','/ˈkʌmftəbl/','thoải mái')}</div>
+  <div class="note"><h3>Hai ký hiệu cần biết</h3><ul><li><b>ˈ</b> đặt trước âm tiết được nhấn: /rɪˈ<b>siːt</b>/.</li><li><b>ː</b> nghĩa là kéo dài âm: /siː/ dài hơn /sɪ/.</li></ul></div>
+  <div class="note warn"><p>Mẹo: tra từ trên Cambridge Dictionary, bấm loa <b>UK</b> để nghe giọng Anh, hay dùng trong IELTS.</p></div>`,
+  quiz:()=>sample([
+   qText('Chữ nào không đọc trong “receipt”?','p',['c','t','e']),
+   qText('“debt” đọc là?','/det/',['/debt/','/diːbt/','/dept/']),
+   qText('Dấu ː trong /siː/ nghĩa là?','Kéo dài âm',['Nhấn trọng âm','Âm câm','Lên giọng']),
+   {sayEn:'Wednesday',prompt:'Nghe và chọn từ đúng',opts:shuffle([opt('<b>Wednesday</b>',1),opt('<b>wedding</b>'),opt('<b>weekday</b>'),opt('<b>windy</b>')])},
+   qText('IPA giống vai trò của gì trong tiếng Trung?','Pinyin',['Chữ Hán','Bộ thủ','Lượng từ'])
+  ],4)},
+ {t:'Nguyên âm ngắn và dài',d:'ship – sheep, full – fool',
+  learn:()=>`
+  <p>Tiếng Việt không phân biệt âm ngắn và dài, nhưng tiếng Anh thì có, và đổi nghĩa luôn: <b>ship</b> (tàu) khác <b>sheep</b> (cừu). Nghe từng cặp:</p>
+  <div class="pairs">${EN_SHORT.slice(0,9).map(([a,b,tip])=>`<div class="pair"><div class="chips">${enChip(a)}${enChip(b)}</div><p>${esc(tip)}</p></div>`).join('')}</div>`,
+  quiz:()=>sample(EN_SHORT,4).map(([a,b,t])=>enPair(a,b,t))},
+ {t:'Nguyên âm đôi',d:'day, my, boy, now, go',
+  learn:()=>`
+  <p>Nguyên âm đôi là hai âm trượt vào nhau. Nhiều âm rất gần vần tiếng Việt nên dễ học:</p>
+  <div class="sound">${[['/eɪ/','day','gần “ây”'],['/aɪ/','my','gần “ai”'],['/ɔɪ/','boy','gần “oi”'],['/aʊ/','now','gần “ao”'],['/əʊ/','go','gần “âu”, giọng Anh'],['/ɪə/','here','gần “ia”'],['/eə/','hair','“e” trượt sang “ơ”'],['/ʊə/','tour','gần “ua”']].map(([i,w,t])=>sndEn(i,w,t)).join('')}</div>
+  <div class="note"><p>Lỗi hay gặp: đọc <b>name</b> thành “nem”. Hãy trượt hết sang /ɪ/: <b>/neɪm/</b> “nây-m”.</p></div>`,
+  quiz:()=>sample([
+   qText('Từ nào có âm giống “day” /eɪ/?','rain',['ran','rim','run']),
+   qText('Từ nào có âm giống “my” /aɪ/?','fine',['fin','fan','fun']),
+   qText('Từ nào có âm giống “go” /əʊ/?','phone',['fun','fan','fin']),
+   qText('Từ nào có âm giống “now” /aʊ/?','house',['horse','his','has']),
+   qText('Từ nào có âm giống “boy” /ɔɪ/?','coin',['cone','can','kin'])
+  ],4)},
+ {t:'Âm cuối',d:'Đừng nuốt âm cuối',
+  learn:()=>`
+  <p>Người Việt hay bỏ hoặc nuốt âm cuối, nhưng trong tiếng Anh âm cuối mang nghĩa: <b>card</b> (thẻ) khác <b>cart</b> (xe đẩy), <b>price</b> (giá) khác <b>prize</b> (giải thưởng).</p>
+  <div class="pairs">${EN_END.map(([a,b,tip])=>`<div class="pair"><div class="chips">${enChip(a)}${enChip(b)}</div><p>${esc(tip)}</p></div>`).join('')}</div>
+  <div class="note"><p>Đặc biệt nhớ đọc <b>-s</b> ở số nhiều: <b>invoices, receipts, documents</b>. Thiếu -s là sai ngữ pháp khi nói.</p></div>`,
+  quiz:()=>sample(EN_END,4).map(([a,b,t])=>enPair(a,b,t))},
+ {t:'Phụ âm khó',d:'/θ/ /ð/ /ʃ/ /tʃ/ /dʒ/ /v/',
+  learn:()=>`
+  <p>Đây là những phụ âm tiếng Việt không có. Thú vị là chữ <b>“th”</b> tiếng Việt lại gần với <b>t</b> của Pinyin (bật hơi), còn <b>th</b> tiếng Anh /θ/ là một âm hoàn toàn khác.</p>
+  <div class="pairs">${EN_CONS.map(([a,b,tip])=>`<div class="pair"><div class="chips">${enChip(a)}${enChip(b)}</div><p>${esc(tip)}</p></div>`).join('')}</div>`,
+  quiz:()=>sample(EN_CONS,4).map(([a,b,t])=>enPair(a,b,t))},
+ {t:'Đuôi -s và -ed',d:'/s/ /z/ /ɪz/ · /t/ /d/ /ɪd/',
+  learn:()=>`
+  <div class="group"><h3>Đuôi -s / -es</h3><div class="chips">${enChip('works','/s/','sau âm không rung')}${enChip('checks','/s/')}${enChip('plays','/z/','sau âm rung')}${enChip('bags','/z/')}${enChip('watches','/ɪz/','sau s, z, ʃ, tʃ, dʒ')}${enChip('invoices','/ɪz/')}</div></div>
+  <div class="group"><h3>Đuôi -ed</h3><div class="chips">${enChip('worked','/t/','sau âm không rung')}${enChip('finished','/t/')}${enChip('played','/d/','sau âm rung')}${enChip('approved','/d/')}${enChip('wanted','/ɪd/','sau t, d')}${enChip('needed','/ɪd/')}</div></div>
+  <div class="note"><p>Chỉ thêm một âm tiết khi gặp /ɪz/ hoặc /ɪd/. <b>worked</b> đọc 1 âm tiết “wơkt”, không phải “wơ-kết”.</p></div>`,
+  quiz:()=>sample([
+   qText('Đuôi -s trong “invoices” đọc là?','/ɪz/',['/s/','/z/']),
+   qText('Đuôi -s trong “plays” đọc là?','/z/',['/s/','/ɪz/']),
+   qText('Đuôi -s trong “works” đọc là?','/s/',['/z/','/ɪz/']),
+   qText('Đuôi -ed trong “wanted” đọc là?','/ɪd/',['/t/','/d/']),
+   qText('Đuôi -ed trong “checked” đọc là?','/t/',['/d/','/ɪd/']),
+   qText('Đuôi -ed trong “approved” đọc là?','/d/',['/t/','/ɪd/'])
+  ],4)},
+ {t:'Trọng âm từ',d:'PHOto · phoTOgraphy',
+  learn:()=>`
+  <p>Mỗi từ nhiều âm tiết có một âm tiết đọc <b>to, dài, cao</b> hơn. Đặt sai trọng âm thì người nghe khó hiểu dù phát âm từng âm đúng. Giống thanh điệu tiếng Trung, đây là “nhạc” của từ.</p>
+  <div class="chips">${enChip('PHOtograph','','ảnh')}${enChip('phoTOgraphy','','nhiếp ảnh')}${enChip('acCOUNtant','','kế toán viên')}${enChip('INvoice','','hóa đơn')}${enChip('inforMAtion','','thông tin')}${enChip('reconciliAtion','','đối chiếu')}</div>
+  <div class="note"><h3>Ba quy tắc hay dùng</h3><ul><li>Danh từ, tính từ 2 âm tiết thường nhấn âm đầu: <b>TA</b>ble, <b>HAP</b>py.</li><li>Động từ 2 âm tiết thường nhấn âm sau: de<b>CIDE</b>, be<b>GIN</b>.</li><li>Từ đuôi <b>-tion, -ic</b>: nhấn ngay trước đuôi: infor<b>MA</b>tion, eco<b>NO</b>mic.</li></ul></div>`,
+  quiz:()=>sample([['accountant','ac-COUN-tant',['AC-coun-tant','ac-coun-TANT']],['invoice','IN-voice',['in-VOICE']],['information','in-for-MA-tion',['IN-for-ma-tion','in-FOR-ma-tion']],['develop','de-VE-lop',['DE-ve-lop','de-ve-LOP']],['economic','e-co-NO-mic',['E-co-no-mic','e-CO-no-mic']],['decide','de-CIDE',['DE-cide']],['important','im-POR-tant',['IM-por-tant','im-por-TANT']],['photography','pho-TO-gra-phy',['PHO-to-gra-phy','pho-to-GRA-phy']]],4).map(([w,r,ws])=>({sayEn:w,prompt:`Trọng âm của <b>${w}</b> rơi vào đâu?`,opts:shuffle([opt(`<b>${r}</b>`,1),...ws.map(x=>opt(`<b>${x}</b>`))]),explain:`<div class="reveal">${playEn(w)}<b>${r}</b></div>`}))},
+ {t:'Âm /ə/ và dạng yếu',d:'about, to, for, can',
+  learn:()=>`
+  <p><b>/ə/</b> (schwa) là âm phổ biến nhất tiếng Anh: một âm “ơ” rất ngắn, nhẹ, ở những âm tiết không nhấn: <b>a</b>bout, banan<b>a</b>, teach<b>er</b>.</p>
+  <p>Các từ nhỏ như <b>to, for, can, and, of</b> trong câu thường đọc yếu với /ə/. Đọc đủ từng từ nghe rất “cứng”.</p>
+  <div class="chips">${enChip('about','/əˈbaʊt/')}${enChip('I want to go','to = /tə/')}${enChip('Can you help me?','can = /kən/')}${enChip('fish and chips','and = /ən/')}${enChip('a cup of tea','of = /əv/')}</div>`,
+  quiz:()=>sample([
+   qText('Trong “I want to go”, “to” đọc là?','/tə/',['/tuː/','/tɔː/']),
+   qText('Âm phổ biến nhất trong tiếng Anh là?','/ə/',['/iː/','/æ/','/θ/']),
+   qText('“Can you help me?” — can đọc là?','/kən/',['/kæn/','/kɑːn/']),
+   qText('Từ nào bắt đầu bằng âm /ə/?','about',['apple','after','answer'])
+  ],4)},
+ {t:'Nối âm',d:'pick it up → pi-ki-tup',
+  learn:()=>`
+  <p>Khi từ trước kết thúc bằng <b>phụ âm</b> và từ sau bắt đầu bằng <b>nguyên âm</b>, người bản xứ nối liền hai từ. Đây là lý do nghe tiếng Anh thấy “dính chữ”.</p>
+  <div class="chips">${enChip('pick it up','pi-ki-tup')}${enChip('check it out','che-ki-tout')}${enChip('an apple','a-napple')}${enChip('not at all','no-ta-tall')}${enChip('turn it off','tur-ni-toff')}${enChip('an hour','a-nour · h câm')}</div>`,
+  quiz:()=>sample([
+   qText('Nối âm xảy ra khi nào?','Phụ âm cuối gặp nguyên âm đầu của từ sau',['Hai từ đều bắt đầu bằng phụ âm','Cuối câu hỏi','Trước dấu phẩy']),
+   qText('“an hour” nghe như?','a-nour',['an-hour','a-hour']),
+   qText('“not at all” nghe như?','no-ta-tall',['not-at-all (tách rời)','na-tat-all']),
+   {sayEn:'Turn it off, please.',prompt:'Nghe và chọn câu đúng',opts:shuffle([opt('<b>Turn it off, please.</b>',1),opt('<b>Turn it on, please.</b>'),opt('<b>Tell it off, please.</b>'),opt('<b>Turn of it, please.</b>')])}
+  ],4)},
+ {t:'Ngữ điệu câu',d:'Câu hỏi lên giọng hay xuống giọng',
+  learn:()=>`
+  <p>Tiếng Trung: mỗi chữ có thanh cố định, câu hỏi đánh dấu bằng <span class="hz">吗</span>. Tiếng Anh: không có thanh từng chữ, nhưng <b>cả câu</b> có giai điệu.</p>
+  <ul><li><b>Câu hỏi Yes/No</b> lên giọng cuối câu ↗: Do you like coffee?</li><li><b>Câu hỏi Wh-</b> xuống giọng ↘: Where do you work?</li><li><b>Câu kể</b> xuống giọng ↘: I work in accounting.</li><li><b>Liệt kê</b>: lên, lên, xuống: invoices ↗, receipts ↗ and contracts ↘.</li></ul>
+  <div class="chips">${enChip('Do you like coffee?','↗')}${enChip('Where do you work?','↘')}${enChip('I work in accounting.','↘')}${enChip('I need invoices, receipts and contracts.','↗ ↗ ↘')}</div>`,
+  quiz:()=>sample([
+   qText('“Do you like coffee?” — cuối câu?','Lên giọng ↗',['Xuống giọng ↘','Giữ ngang']),
+   qText('“Where do you work?” — cuối câu?','Xuống giọng ↘',['Lên giọng ↗','Giữ ngang']),
+   qText('Khi hỏi với 吗, thanh điệu từng chữ tiếng Trung có đổi không?','Không, vẫn giữ thanh',['Có, chữ cuối lên giọng','Có, mọi chữ thành thanh 2']),
+   qText('“I work in accounting.” — cuối câu?','Xuống giọng ↘',['Lên giọng ↗','Giữ ngang'])
+  ],4)}
+];
 
-/* ---------- views ---------- */
+/* ========== PHASE 2 · bilingual topic units ==========
+   zw: [hanzi, pinyin, vi, en, exHz, exPy, exVi] · ew: [word, vi, example, note]
+   zp: Chinese patterns · zq/eq: authored questions [prompt,right,[wrongs],explain]
+   dl: dialogue [speaker, hz, py, vi] · sp: IELTS Speaking Part 1 */
+const UNITS=[
+{vi:'Chào hỏi & giới thiệu',en:'Greetings & introductions',hz:'你好',
+ zw:[['你好','nǐ hǎo','xin chào','hello','你好，我叫小薇。','Nǐ hǎo, wǒ jiào Xiǎo Wēi.','Xin chào, tôi tên là Tiểu Vi.'],['我','wǒ','tôi','I, me','我是越南人。','Wǒ shì Yuè·nán·rén.','Tôi là người Việt Nam.'],['你','nǐ','bạn','you','你是老师吗？','Nǐ shì lǎo·shī ma?','Bạn là giáo viên à?'],['是','shì','là','to be','我是学生。','Wǒ shì xué·sheng.','Tôi là học sinh.'],['叫','jiào','tên là, gọi là','to be called','我叫王明。','Wǒ jiào Wáng Míng.','Tôi tên là Vương Minh.'],['名字','míng·zi','tên','name','你叫什么名字？','Nǐ jiào shén·me míng·zi?','Bạn tên là gì?'],['谢谢','xiè·xie','cảm ơn','thank you','谢谢你！','Xiè·xie nǐ!','Cảm ơn bạn!'],['再见','zài·jiàn','tạm biệt','goodbye','老师，再见！','Lǎo·shī, zài·jiàn!','Tạm biệt thầy/cô!']],
+ ew:[["colleague","đồng nghiệp","I had lunch with a colleague from the accounting team.","= co-worker"],["introduce yourself","tự giới thiệu","Could you introduce yourself briefly?","introduce A to B"],["be originally from","gốc ở, quê ở","I'm originally from Hue, but I live in Ho Chi Minh City now.","nói về quê gốc"],["be based in","làm việc / đặt trụ sở ở","Our company is based in Ho Chi Minh City.","dùng cho người và công ty"],["work as","làm nghề, làm vị trí","I work as an accounting assistant.","work as + a/an + nghề"],["get to know","làm quen, hiểu thêm về","It takes time to get to know new colleagues.","get to know + người"],["keep in touch","giữ liên lạc","Let's keep in touch after the training.","stay in touch cũng được"],["It's a pleasure to meet you","rất vui được gặp bạn","Hi Linh, it's a pleasure to meet you.","trang trọng hơn Nice to meet you"]],
+ zp:[{t:'Giới thiệu tên: 我叫 + tên',f:'我 + 叫 + tên',n:'叫 nghĩa là “gọi là”. Hỏi tên: 你叫什么名字？ (什么 shénme = gì).',ex:[['我叫小薇。','Wǒ jiào Xiǎo Wēi.','Tôi tên là Tiểu Vi.'],['你叫什么名字？','Nǐ jiào shén·me míng·zi?','Bạn tên là gì?'],['他叫王明。','Tā jiào Wáng Míng.','Anh ấy tên là Vương Minh.']]},
+     {t:'Câu “là”: A 是 B',f:'A + 是 + B',n:'是 nối hai danh từ, như “là”. Phủ định: 不是 (bú shì).',ex:[['我是越南人。','Wǒ shì Yuè·nán·rén.','Tôi là người Việt Nam.'],['她是老师。','Tā shì lǎo·shī.','Cô ấy là giáo viên.'],['我不是老师。','Wǒ bú shì lǎo·shī.','Tôi không phải giáo viên.']]},
+     {t:'Câu hỏi có/không: thêm 吗',f:'Câu kể + 吗？',n:'Thêm 吗 (ma) vào cuối câu kể là thành câu hỏi. Hỏi lại “còn bạn?”: 你呢？',ex:[['你是学生吗？','Nǐ shì xué·sheng ma?','Bạn là học sinh à?'],['你好吗？','Nǐ hǎo ma?','Bạn khỏe không?'],['我很好，你呢？','Wǒ hěn hǎo, nǐ ne?','Tôi khỏe, còn bạn?']]}],
+ zq:[['“Tôi tên là Vi” nói thế nào?','我叫 Vi。',['叫我 Vi。','我是叫 Vi。','Vi 我叫。']],['Câu nào là câu hỏi?','你是老师吗？',['你是老师。','我是老师。','他不是老师。'],'Thêm 吗 cuối câu kể để hỏi.'],['“Tôi không phải học sinh”:','我不是学生。',['我是不学生。','我没是学生。','不我是学生。'],'不 đứng trước 是.'],['Hỏi “Bạn tên là gì?”:','你叫什么名字？',['你什么叫名字？','什么你叫名字？','你名字叫吗？']],['我很好，你呢？ — 你呢 nghĩa là?','Còn bạn thì sao?',['Bạn là ai?','Bạn ở đâu?','Bạn có khỏe không?']]],
+ eg:{t:'Present simple: nói về bản thân',note:"<p>Dùng thì hiện tại đơn cho công việc, nơi sống, thói quen và sự thật lâu dài.</p><ul><li>I / you / we / they + <b>work</b></li><li>he / she / it + <b>works</b> (thêm -s/-es)</li><li>Phủ định: <b>don't / doesn't</b> + động từ nguyên mẫu</li><li>Câu hỏi: <b>Do / Does</b> + chủ ngữ + động từ?</li></ul>",ex:[["I work as an accounting assistant.","Tôi làm trợ lý kế toán."],["She lives in District 7.","Cô ấy sống ở Quận 7."],["Our company doesn't open on Sundays.","Công ty chúng tôi không mở cửa Chủ nhật."],["Where do you work?","Bạn làm việc ở đâu?"]],mis:[["She work in an office.","She works in an office.","Ngôi thứ ba số ít phải thêm -s."],["He doesn't works here.","He doesn't work here.","Sau doesn't dùng động từ nguyên mẫu."],["Do she like coffee?","Does she like coffee?","He/she/it đi với does."]]},
+ eq:[["She ___ in a customs company.","works",["work","working","is work"],"He/she/it + V-s."],["___ you live near your office?","Do",["Does","Are","Is"]],["My manager ___ coffee in the morning.","doesn't drink",["don't drink","doesn't drinks","not drink"]],["“Tôi quê ở Huế” — câu nào tự nhiên nhất?","I'm originally from Hue.",["I originally come Hue.","I am origin from Hue.","My original is Hue."]],["“Công ty đặt trụ sở ở TP.HCM”:","Our company is based in Ho Chi Minh City.",["Our company bases at Ho Chi Minh City.","Our company is base on Ho Chi Minh City.","Our company based Ho Chi Minh City."]]],
+ dl:[['Vi','你好！','Nǐ hǎo!','Xin chào!'],['Minh','你好！你叫什么名字？','Nǐ hǎo! Nǐ jiào shén·me míng·zi?','Chào bạn! Bạn tên là gì?'],['Vi','我叫小薇。你呢？','Wǒ jiào Xiǎo Wēi. Nǐ ne?','Tôi tên là Tiểu Vi. Còn bạn?'],['Minh','我叫王明。你是中国人吗？','Wǒ jiào Wáng Míng. Nǐ shì Zhōng·guó·rén ma?','Tôi tên Vương Minh. Bạn là người Trung Quốc à?'],['Vi','不是，我是越南人。','Bú shì, wǒ shì Yuè·nán·rén.','Không, tôi là người Việt Nam.'],['Minh','很高兴认识你！','Hěn gāo·xìng rèn·shi nǐ!','Rất vui được làm quen với bạn!']],
+ sp:[{q:"Do you work or are you a student?",a:"I work as an accounting assistant at a customs brokerage company in Ho Chi Minh City. I mostly deal with invoices and reconciliation. It's quite detail-oriented work, but I enjoy it because I like things to be accurate.",ph:["I work as…","I mostly deal with…","It's quite …, but I enjoy it because…"]},{q:"Where are you from?",a:"I'm originally from a small town, but I've been living in Ho Chi Minh City for a few years now. I like it here because it's lively and there are lots of opportunities.",ph:["I'm originally from…","I've been living in … for…","I like it here because…"]}]},
+
+{vi:'Số đếm & tuổi',en:'Numbers & figures',hz:'十',
+ zw:[['一','yī','một','one','一个人','yí gè rén','một người'],['二','èr','hai','two','二月','èr yuè','tháng Hai'],['三','sān','ba','three','三个朋友','sān gè péng·you','ba người bạn'],['十','shí','mười','ten','十个','shí gè','mười cái'],['两','liǎng','hai (khi đếm số lượng)','two (of something)','两个人','liǎng gè rén','hai người'],['零','líng','số không','zero','二零二六年','èr líng èr liù nián','năm 2026'],['岁','suì','tuổi','years old','我二十五岁。','Wǒ èr·shí·wǔ suì.','Tôi 25 tuổi.'],['多少','duō·shao','bao nhiêu','how many / how much','多少人？','Duō·shao rén?','Bao nhiêu người?'],['电话','diàn·huà','điện thoại','telephone','我的电话','wǒ de diàn·huà','điện thoại của tôi'],['号码','hào·mǎ','số (điện thoại…)','number','电话号码','diàn·huà hào·mǎ','số điện thoại']],
+ ew:[["approximately","khoảng, xấp xỉ","Approximately 30% of our invoices are paid late.","trang trọng; = about, around"],["roughly","khoảng chừng","It takes roughly an hour to reconcile the bank statement.","văn nói"],["a quarter","một phần tư","A quarter of the staff work remotely.","three quarters = 3/4"],["double","tăng gấp đôi","Our workload doubled at the end of the year.","triple = gấp ba"],["increase","tăng (n/v)","There was a sharp increase in costs.","a sharp / slight increase"],["decline","giảm (n/v)","Sales declined slightly in March.","= decrease, fall"],["remain stable","giữ ổn định","The exchange rate remained stable last week.","IELTS Writing Task 1 hay dùng"],["figure","con số","Please double-check these figures.","figures = số liệu"]],
+ zp:[{t:'Đếm từ 11 đến 99',f:'十 + số (11–19) · số + 十 + số (21–99)',n:'十一 = 11, 二十 = 20, 二十五 = 25, 九十九 = 99. Rất giống tiếng Việt “hai mươi lăm”. Khi đếm số lượng, 2 dùng 两: 两个人 (hai người).',ex:[['十一','shí·yī','11'],['二十','èr·shí','20'],['三十八','sān·shí·bā','38'],['九十九','jiǔ·shí·jiǔ','99']]},
+     {t:'Hỏi tuổi',f:'Chủ ngữ + số + 岁',n:'Hỏi người lớn: 你多大？ Hỏi trẻ em: 你几岁？ Trả lời không cần 是.',ex:[['你多大？','Nǐ duō dà?','Bạn bao nhiêu tuổi?'],['我二十五岁。','Wǒ èr·shí·wǔ suì.','Tôi 25 tuổi.'],['我妈妈五十岁。','Wǒ mā·ma wǔ·shí suì.','Mẹ tôi 50 tuổi.']]},
+     {t:'Hỏi số điện thoại',f:'你的电话号码是多少？',n:'Khi đọc số điện thoại, số 1 thường đọc là yāo để khỏi nhầm với 7 (qī).',ex:[['你的电话号码是多少？','Nǐ de diàn·huà hào·mǎ shì duō·shao?','Số điện thoại của bạn là bao nhiêu?'],['零九一二，三四五。','Líng jiǔ yāo èr, sān sì wǔ.','0912, 345.']]}],
+ zq:[['25 đọc là?','èrshíwǔ',['wǔshíèr','èrwǔ','shí\'èrwǔ']],['“Hai người” nói thế nào?','两个人',['二个人','二人个','两人个'],'Đếm số lượng dùng 两.'],['Hỏi tuổi người lớn:','你多大？',['你几岁？','你大多？','你多少大？'],'几岁 dùng để hỏi trẻ em.'],['“Tôi 30 tuổi”:','我三十岁。',['我三岁十。','我岁三十。','我三十个岁。']],['Đọc số điện thoại, số 1 thường đọc là?','yāo',['yī','yí','yì']]],
+ eg:{t:'Countable & uncountable: many / much',note:"<p>Danh từ <b>đếm được</b> (invoice, colleague) có số nhiều; danh từ <b>không đếm được</b> (money, information, work, advice) không thêm -s.</p><ul><li>How <b>many</b> invoices? · How <b>much</b> money?</li><li><b>a few</b> + đếm được · <b>a little</b> + không đếm được</li><li>information, advice, equipment <b>không bao giờ</b> thêm -s</li></ul>",ex:[["How many invoices do we have this month?","Tháng này mình có bao nhiêu hóa đơn?"],["How much money did we spend on transport?","Mình đã chi bao nhiêu tiền vận chuyển?"],["I need a little more time.","Tôi cần thêm chút thời gian."],["Can you give me some advice?","Bạn cho tôi vài lời khuyên được không?"]],mis:[["How much invoices…?","How many invoices…?","invoice đếm được."],["Thank you for the informations.","Thank you for the information.","information không đếm được."],["I have a few money.","I have a little money.","money không đếm được."]]},
+ eq:[["How ___ colleagues are in your team?","many",["much","a little","a much"]],["Thank you for the ___.","information",["informations","an information","information's"]],["Sales ___ slightly in March. (giảm nhẹ)","declined",["doubled","remained","increased"]],["“Khoảng 30%” — trang trọng nhất:","approximately 30%",["30% around about","nearly about 30%","30% roughly about"]],["There was a sharp ___ in costs. (tăng mạnh)","increase",["decline","stable","figure"]]],
+ dl:[['Minh','你的电话号码是多少？','Nǐ de diàn·huà hào·mǎ shì duō·shao?','Số điện thoại của bạn là bao nhiêu?'],['Vi','零九一二，三四五，六七八。','Líng jiǔ yāo èr, sān sì wǔ, liù qī bā.','0912 345 678.'],['Minh','谢谢！你多大？','Xiè·xie! Nǐ duō dà?','Cảm ơn! Bạn bao nhiêu tuổi?'],['Vi','我二十五岁。你呢？','Wǒ èr·shí·wǔ suì. Nǐ ne?','Tôi 25 tuổi. Còn bạn?'],['Minh','我三十岁。','Wǒ sān·shí suì.','Tôi 30 tuổi.']],
+ sp:[{q:"Are you good with numbers?",a:"Yes, I'd say so. I deal with figures every day at work, so I've become quite comfortable with them. I actually find it satisfying when the numbers in a reconciliation match perfectly.",ph:["I'd say so.","I deal with … every day","I find it satisfying when…"]},{q:"Do you remember phone numbers easily?",a:"Not really, to be honest. I used to remember all my friends' numbers, but now I just save everything in my phone. I only know my own number and my mum's by heart.",ph:["Not really, to be honest.","I used to …, but now…","know … by heart"]}]},
+
+{vi:'Gia đình',en:'Family',hz:'家',
+ zw:[['家','jiā','nhà, gia đình','home, family','我家在胡志明市。','Wǒ jiā zài Hú Zhì·míng Shì.','Nhà tôi ở TP. Hồ Chí Minh.'],['爸爸','bà·ba','bố','dad','我爸爸是医生。','Wǒ bà·ba shì yī·shēng.','Bố tôi là bác sĩ.'],['妈妈','mā·ma','mẹ','mom','我妈妈很忙。','Wǒ mā·ma hěn máng.','Mẹ tôi rất bận.'],['哥哥','gē·ge','anh trai','older brother','我有一个哥哥。','Wǒ yǒu yí gè gē·ge.','Tôi có một anh trai.'],['姐姐','jiě·jie','chị gái','older sister','我姐姐是老师。','Wǒ jiě·jie shì lǎo·shī.','Chị tôi là giáo viên.'],['弟弟','dì·di','em trai','younger brother','我弟弟是学生。','Wǒ dì·di shì xué·sheng.','Em trai tôi là học sinh.'],['妹妹','mèi·mei','em gái','younger sister','我没有妹妹。','Wǒ méi·yǒu mèi·mei.','Tôi không có em gái.'],['有','yǒu','có','to have','你有哥哥吗？','Nǐ yǒu gē·ge ma?','Bạn có anh trai không?'],['没有','méi·yǒu','không có','not have','我没有弟弟。','Wǒ méi·yǒu dì·di.','Tôi không có em trai.'],['口','kǒu','(lượng từ đếm người trong nhà)','measure word for family members','我家有四口人。','Wǒ jiā yǒu sì kǒu rén.','Nhà tôi có bốn người.']],
+ ew:[["siblings","anh chị em ruột","I have two siblings: an older brother and a younger sister.","số ít: a sibling"],["only child","con một","As an only child, I spent a lot of time with my cousins.",""],["relatives","họ hàng","We visit our relatives during Tet.","= extended family"],["get along with","hòa hợp với","I get along well with my sister.","Anh-Anh: get on with"],["take after","giống (bố/mẹ)","I take after my mother — we're both very organised.","tính cách hoặc ngoại hình"],["close-knit","gắn bó, khăng khít","We're a close-knit family.","a close-knit family / team"],["bring up","nuôi dạy","I was brought up by my grandparents.","thường dùng bị động"],["look after","chăm sóc","My sister looks after our parents.","= take care of"]],
+ zp:[{t:'Hỏi nhà có mấy người',f:'你家有几口人？ → 我家有 + số + 口人',n:'口 là lượng từ dùng riêng cho số người trong gia đình.',ex:[['你家有几口人？','Nǐ jiā yǒu jǐ kǒu rén?','Nhà bạn có mấy người?'],['我家有五口人。','Wǒ jiā yǒu wǔ kǒu rén.','Nhà tôi có năm người.']]},
+     {t:'Có / không có: 有 và 没有',f:'有 + danh từ · 没有 + danh từ',n:'Phủ định của 有 luôn là 没有, không bao giờ nói 不有.',ex:[['我有一个姐姐。','Wǒ yǒu yí gè jiě·jie.','Tôi có một chị gái.'],['我没有哥哥。','Wǒ méi·yǒu gē·ge.','Tôi không có anh trai.'],['你有弟弟吗？','Nǐ yǒu dì·di ma?','Bạn có em trai không?']]},
+     {t:'Lượng từ 个 và chữ 的 (của)',f:'số + 个 + danh từ · A + 的 + B',n:'Giữa số và danh từ phải có lượng từ, thông dụng nhất là 个 (gè). 的 nghĩa là “của”. Với người thân có thể bỏ 的: 我妈妈.',ex:[['两个妹妹','liǎng gè mèi·mei','hai em gái'],['我的名字','wǒ de míng·zi','tên của tôi'],['我妈妈','wǒ mā·ma','mẹ tôi']]}],
+ zq:[['“Tôi không có anh trai”:','我没有哥哥。',['我不有哥哥。','我有没哥哥。','我没哥哥有。'],'Phủ định của 有 là 没有.'],['“Nhà tôi có 4 người”:','我家有四口人。',['我家有四个口人。','我家四口人有。','我家是四口人有。']],['妹妹 là ai?','Em gái',['Chị gái','Em trai','Mẹ']],['“Một chị gái”:','一个姐姐',['一姐姐','一口姐姐','个一姐姐'],'Số + lượng từ 个 + danh từ.'],['“Tên của tôi”:','我的名字',['名字的我','我名字的','的我名字']]],
+ eg:{t:"Possessive: my / your · 's",note:"<p>Nói “của ai”: dùng <b>my, your, his, her, our, their</b> hoặc <b>'s</b> sau người.</p><ul><li>my sister's husband = chồng của chị tôi</li><li>my parents' house: danh từ số nhiều có -s thì chỉ thêm dấu '</li><li>Với vật: the name <b>of</b> the company</li></ul>",ex:[["My brother's wife is a nurse.","Vợ của anh trai tôi là y tá."],["Our parents' house is near the river.","Nhà bố mẹ chúng tôi gần sông."],["Her son looks after the family business.","Con trai cô ấy trông coi việc kinh doanh của gia đình."]],mis:[["The house of my parents is big.","My parents' house is big.","Với người, dùng 's tự nhiên hơn."],["She is my brother wife.","She is my brother's wife.","Thiếu 's."],["I get along my sister.","I get along with my sister.","get along with + người."]]},
+ eq:[["This is ___ car. (của bố mẹ tôi)","my parents'",["my parent's","my parents","my parents's"]],["She is ___ wife. (vợ anh trai tôi)","my brother's",["my brother","my brothers","brother's my"]],["I ___ my father — we both love numbers.","take after",["take care","bring up","get along"]],["“Con một”:","an only child",["a one child","a single kid","an alone child"]],["I get along ___ my sister.","with",["to","for","by"]]],
+ dl:[['Minh','你家有几口人？','Nǐ jiā yǒu jǐ kǒu rén?','Nhà bạn có mấy người?'],['Vi','我家有四口人：爸爸、妈妈、哥哥和我。','Wǒ jiā yǒu sì kǒu rén: bà·ba, mā·ma, gē·ge hé wǒ.','Nhà tôi có bốn người: bố, mẹ, anh trai và tôi.'],['Minh','你有妹妹吗？','Nǐ yǒu mèi·mei ma?','Bạn có em gái không?'],['Vi','没有。你呢？','Méi·yǒu. Nǐ ne?','Không có. Còn bạn?'],['Minh','我有一个姐姐。','Wǒ yǒu yí gè jiě·jie.','Tôi có một chị gái.']],
+ sp:[{q:"Do you have a big family?",a:"Not really. There are four of us: my parents, my older brother and me. We're quite a close-knit family, so we try to have dinner together every weekend.",ph:["There are … of us","We're quite a close-knit family","we try to…"]},{q:"Who are you closest to in your family?",a:"Probably my mother. I take after her in many ways — we're both quite organised and a bit of a perfectionist. I can talk to her about almost anything.",ph:["Probably…","I take after her in many ways","I can talk to her about…"]}]},
+
+{vi:'Thời gian & lịch hẹn',en:'Time & schedules',hz:'今天',
+ zw:[['今天','jīn·tiān','hôm nay','today','今天星期五。','Jīn·tiān xīng·qī·wǔ.','Hôm nay thứ Sáu.'],['明天','míng·tiān','ngày mai','tomorrow','明天见！','Míng·tiān jiàn!','Mai gặp nhé!'],['昨天','zuó·tiān','hôm qua','yesterday','昨天很忙。','Zuó·tiān hěn máng.','Hôm qua rất bận.'],['现在','xiàn·zài','bây giờ','now','现在几点？','Xiàn·zài jǐ diǎn?','Bây giờ mấy giờ?'],['点','diǎn','giờ','o\'clock','八点','bā diǎn','tám giờ'],['分','fēn','phút','minute','九点十分','jiǔ diǎn shí fēn','chín giờ mười phút'],['半','bàn','rưỡi','half','七点半','qī diǎn bàn','bảy giờ rưỡi'],['星期','xīng·qī','tuần, thứ','week','星期一','xīng·qī·yī','thứ Hai'],['月','yuè','tháng','month','十一月','shí·yī yuè','tháng Mười Một'],['号','hào','ngày (trong tháng)','day of the month','六号','liù hào','ngày mùng 6']],
+ ew:[["schedule","lịch trình; lên lịch","Let me check my schedule.","behind schedule = trễ tiến độ"],["deadline","hạn chót","The deadline for the VAT report is the 20th.","meet / miss a deadline"],["be due","đến hạn","The payment is due next Friday.",""],["postpone","hoãn lại","We postponed the meeting until Monday.","= put off"],["reschedule","dời lịch","Can we reschedule our call to 3 p.m.?",""],["in advance","trước (thời hạn)","Please send the documents in advance.",""],["on time","đúng giờ","The shipment arrived on time.","in time = kịp lúc"],["fortnight","hai tuần","I'll be on holiday for a fortnight.","Anh-Anh, hay gặp trong IELTS"]],
+ zp:[{t:'Nói giờ: số + 点 + số + 分',f:'现在 + giờ',n:'Câu nói giờ không cần 是: 现在八点。 半 = rưỡi.',ex:[['现在几点？','Xiàn·zài jǐ diǎn?','Bây giờ mấy giờ?'],['现在八点半。','Xiàn·zài bā diǎn bàn.','Bây giờ tám giờ rưỡi.'],['十点二十分','shí diǎn èr·shí fēn','mười giờ hai mươi']]},
+     {t:'Ngày tháng: lớn trước, nhỏ sau',f:'năm + 月 + 号 + 星期',n:'Ngược tiếng Việt: 十一月六号 = ngày 6 tháng 11. Thứ trong tuần: 星期 + số (星期一 = thứ Hai … 星期六 = thứ Bảy), Chủ nhật = 星期天.',ex:[['今天几月几号？','Jīn·tiān jǐ yuè jǐ hào?','Hôm nay ngày mấy tháng mấy?'],['今天十一月六号。','Jīn·tiān shí·yī yuè liù hào.','Hôm nay ngày 6 tháng 11.'],['明天星期六。','Míng·tiān xīng·qī·liù.','Ngày mai thứ Bảy.']]},
+     {t:'Thời gian đứng trước động từ',f:'Chủ ngữ + thời gian + động từ',n:'Khác tiếng Việt và tiếng Anh: thời gian đặt trước động từ, không đặt cuối câu.',ex:[['我明天上班。','Wǒ míng·tiān shàng·bān.','Mai tôi đi làm.'],['我八点上班。','Wǒ bā diǎn shàng·bān.','Tôi đi làm lúc tám giờ.']]}],
+ zq:[['“Bây giờ 7 giờ rưỡi”:','现在七点半。',['现在半七点。','七点现在半。','半七点现在。']],['Ngày 6 tháng 11 viết là?','十一月六号',['六号十一月','六月十一号','十一号六月']],['星期三 là thứ mấy?','Thứ Tư',['Thứ Ba','Thứ Năm','Chủ nhật'],'星期一 là thứ Hai, nên 星期三 là thứ Tư.'],['“Mai tôi đi làm”:','我明天上班。',['我上班明天。','明天上班我。','我上班在明天。'],'Thời gian đứng trước động từ.'],['Chủ nhật là?','星期天',['星期七','星期零','星期八']]],
+ eg:{t:'Prepositions of time: in / on / at',note:"<ul><li><b>at</b> + giờ, thời điểm: at 8 a.m., at noon</li><li><b>on</b> + ngày, thứ: on Monday, on 6 November</li><li><b>in</b> + tháng, năm, buổi: in November, in 2026, in the morning</li><li>Không dùng giới từ trước <b>this, next, last, every</b>: next Friday, every day</li></ul>",ex:[["The meeting starts at 9 a.m. on Monday.","Cuộc họp bắt đầu lúc 9 giờ sáng thứ Hai."],["The VAT report is due on the 20th.","Báo cáo VAT đến hạn ngày 20."],["We close the books in the first week of the month.","Chúng tôi khóa sổ vào tuần đầu tháng."]],mis:[["on next Friday","next Friday","Không có giới từ trước next."],["in Monday","on Monday","Thứ trong tuần dùng on."],["at the morning","in the morning","Buổi trong ngày dùng in (trừ at night)."]]},
+ eq:[["The payment is due ___ 15 December.","on",["in","at","by on"]],["I usually start work ___ 8 o'clock.","at",["in","on","for"]],["We moved here ___ 2022.","in",["on","at","by in"]],["Let's meet ___ Friday.","next",["on next","in next","at next"]],["“Dời lịch cuộc gọi” là?","reschedule the call",["reorder the call","replace the call","reset the call"]]],
+ dl:[['Minh','明天几号？','Míng·tiān jǐ hào?','Mai ngày mấy?'],['Vi','明天十一月七号，星期六。','Míng·tiān shí·yī yuè qī hào, xīng·qī·liù.','Mai ngày 7 tháng 11, thứ Bảy.'],['Minh','我们星期一几点见？','Wǒ·men xīng·qī·yī jǐ diǎn jiàn?','Thứ Hai mình gặp lúc mấy giờ?'],['Vi','上午九点半。','Shàng·wǔ jiǔ diǎn bàn.','Chín rưỡi sáng.'],['Minh','好，星期一见！','Hǎo, xīng·qī·yī jiàn!','Được, hẹn thứ Hai nhé!']],
+ sp:[{q:"Do you prefer mornings or evenings?",a:"I'm definitely a morning person. I feel more focused in the morning, so I try to do the most demanding tasks, like reconciliations, before lunch. By the evening, I just want to unwind.",ph:["I'm definitely a morning person","I feel more focused…","By the evening, I…"]},{q:"Are you good at managing your time?",a:"I'm getting better at it. I write a to-do list every morning and set reminders for important deadlines. It helps me avoid last-minute stress, especially at month-end.",ph:["I'm getting better at it","set reminders for…","avoid last-minute stress"]}]},
+
+{vi:'Ăn uống',en:'Food & drinks',hz:'吃',
+ zw:[['吃','chī','ăn','to eat','我想吃米饭。','Wǒ xiǎng chī mǐ·fàn.','Tôi muốn ăn cơm.'],['喝','hē','uống','to drink','你喝茶吗？','Nǐ hē chá ma?','Bạn uống trà không?'],['米饭','mǐ·fàn','cơm','cooked rice','两碗米饭','liǎng wǎn mǐ·fàn','hai bát cơm'],['面条','miàn·tiáo','mì sợi','noodles','我喜欢吃面条。','Wǒ xǐ·huan chī miàn·tiáo.','Tôi thích ăn mì.'],['茶','chá','trà','tea','一杯茶','yì bēi chá','một cốc trà'],['咖啡','kā·fēi','cà phê','coffee','越南咖啡很好喝。','Yuè·nán kā·fēi hěn hǎo·hē.','Cà phê Việt Nam rất ngon.'],['水','shuǐ','nước','water','我要一瓶水。','Wǒ yào yì píng shuǐ.','Cho tôi một chai nước.'],['喜欢','xǐ·huan','thích','to like','我喜欢喝茶。','Wǒ xǐ·huan hē chá.','Tôi thích uống trà.'],['想','xiǎng','muốn','would like','我想喝咖啡。','Wǒ xiǎng hē kā·fēi.','Tôi muốn uống cà phê.'],['好吃','hǎo·chī','ngon (đồ ăn)','delicious','这个菜很好吃。','Zhè·ge cài hěn hǎo·chī.','Món này rất ngon.']],
+ ew:[["cuisine","ẩm thực","Vietnamese cuisine is famous for its fresh herbs.",""],["dish","món ăn","Pho is my favourite dish.","main dish, side dish"],["spicy","cay","I can't eat very spicy food.",""],["savoury","mặn (không ngọt)","I prefer savoury snacks to sweets.","Mỹ: savory"],["a balanced diet","chế độ ăn cân bằng","It's hard to keep a balanced diet when you're busy.",""],["eat out","ăn ngoài","We eat out about twice a week.",""],["takeaway","đồ mang đi","Let's get a takeaway tonight.","Mỹ: takeout"],["home-cooked meal","bữa cơm nhà nấu","Nothing beats a home-cooked meal.",""]],
+ zp:[{t:'Muốn làm gì: 想 + động từ',f:'Chủ ngữ + 想 + động từ + (tân ngữ)',n:'想 nhẹ nhàng như “muốn / định”. 要 mạnh hơn, hay dùng khi gọi món: 我要一杯咖啡。',ex:[['我想喝茶。','Wǒ xiǎng hē chá.','Tôi muốn uống trà.'],['你想吃什么？','Nǐ xiǎng chī shén·me?','Bạn muốn ăn gì?'],['我要一杯咖啡。','Wǒ yào yì bēi kā·fēi.','Cho tôi một cốc cà phê.']]},
+     {t:'Lượng từ cho đồ ăn uống',f:'số + 杯 / 碗 / 瓶 + danh từ',n:'杯 bēi = cốc, 碗 wǎn = bát, 瓶 píng = chai.',ex:[['一杯茶','yì bēi chá','một cốc trà'],['两碗米饭','liǎng wǎn mǐ·fàn','hai bát cơm'],['三瓶水','sān píng shuǐ','ba chai nước']]},
+     {t:'Tính từ làm vị ngữ: 很 + tính từ',f:'Chủ ngữ + 很 + tính từ',n:'Không dùng 是 trước tính từ. 很 ở đây chủ yếu để câu tròn, không hẳn là “rất”.',ex:[['这个菜很好吃。','Zhè·ge cài hěn hǎo·chī.','Món này ngon.'],['咖啡很贵。','Kā·fēi hěn guì.','Cà phê đắt.']]}],
+ zq:[['“Tôi muốn uống cà phê”:','我想喝咖啡。',['我喝想咖啡。','我想咖啡喝。','想我喝咖啡。']],['“Một cốc trà”:','一杯茶',['一碗茶','一茶杯','杯一茶']],['“Món này rất ngon”:','这个菜很好吃。',['这个菜是好吃。','这个菜好吃很。','很这个菜好吃。'],'Không dùng 是 trước tính từ.'],['Gọi món “Cho tôi hai bát cơm”:','我要两碗米饭。',['我要二碗米饭。','我要两米饭碗。','我两碗要米饭。']],['好喝 dùng cho?','Đồ uống ngon',['Đồ ăn ngon','Người đẹp','Giá rẻ'],'好吃 cho đồ ăn, 好喝 cho đồ uống.']],
+ eg:{t:"Polite requests: I'd like… / Could I have…?",note:"<p>Khi gọi món hoặc nhờ ai, dùng <b>I'd like</b> (= I would like) hoặc <b>Could I have…?</b> thay vì “I want”, nghe lịch sự hơn.</p><ul><li>I'd like + danh từ: I'd like a black coffee.</li><li>I'd like + to V: I'd like to order now.</li><li>Would you like…? = Bạn có muốn…?</li></ul>",ex:[["I'd like a bowl of pho, please.","Cho tôi một tô phở."],["Could I have the bill, please?","Cho tôi xin hóa đơn."],["Would you like something to drink?","Bạn muốn uống gì không?"]],mis:[["I would like order now.","I'd like to order now.","would like + to V."],["I want the bill.","Could I have the bill, please?","“I want” nghe cộc khi nói với nhân viên."],["Would you like to some tea?","Would you like some tea?","would like + danh từ, không cần to."]]},
+ eq:[["I'd like ___ a table for two.","to book",["book","booking","to booking"]],["___ I have the bill, please?","Could",["Would","Do","Am"]],["Would you like ___ coffee?","some",["to some","to","a some"]],["Đồ ăn “mặn, không ngọt” là?","savoury",["spicy","sour","bitter"]],["“Ăn ngoài” là?","eat out",["eat outside of","go eat door","eat away"]]],
+ dl:[['Phục vụ','你好！你想喝什么？','Nǐ hǎo! Nǐ xiǎng hē shén·me?','Chào chị! Chị muốn uống gì?'],['Vi','我要一杯咖啡。','Wǒ yào yì bēi kā·fēi.','Cho tôi một cốc cà phê.'],['Phục vụ','你想吃什么？','Nǐ xiǎng chī shén·me?','Chị muốn ăn gì?'],['Vi','我要一碗面条。','Wǒ yào yì wǎn miàn·tiáo.','Cho tôi một bát mì.'],['Vi','这个面条很好吃！','Zhè·ge miàn·tiáo hěn hǎo·chī!','Mì này ngon quá!']],
+ sp:[{q:"What's your favourite food?",a:"I'd have to say pho. It's simple, but the broth is so rich and fragrant. I usually have it for breakfast at a small stall near my office, and it's great value for money.",ph:["I'd have to say…","It's simple, but…","great value for money"]},{q:"Do you prefer eating at home or eating out?",a:"On weekdays I often eat out because I don't have time to cook. But at weekends I prefer a home-cooked meal — it's healthier and I find cooking quite relaxing.",ph:["On weekdays …, but at weekends…","it's healthier","I find … quite relaxing"]}]},
+
+{vi:'Một ngày của tôi',en:'Daily routine',hz:'每天',
+ zw:[['起床','qǐ·chuáng','thức dậy','to get up','我六点起床。','Wǒ liù diǎn qǐ·chuáng.','Tôi dậy lúc sáu giờ.'],['上班','shàng·bān','đi làm','to go to work','你几点上班？','Nǐ jǐ diǎn shàng·bān?','Bạn đi làm lúc mấy giờ?'],['下班','xià·bān','tan làm','to finish work','我五点半下班。','Wǒ wǔ diǎn bàn xià·bān.','Tôi tan làm lúc năm rưỡi.'],['睡觉','shuì·jiào','đi ngủ','to sleep','我十一点睡觉。','Wǒ shí·yī diǎn shuì·jiào.','Tôi ngủ lúc mười một giờ.'],['工作','gōng·zuò','làm việc; công việc','to work; job','我在公司工作。','Wǒ zài gōng·sī gōng·zuò.','Tôi làm việc ở công ty.'],['学习','xué·xí','học','to study','我每天学习中文。','Wǒ měi·tiān xué·xí Zhōng·wén.','Mỗi ngày tôi học tiếng Trung.'],['每天','měi·tiān','mỗi ngày','every day','我每天喝咖啡。','Wǒ měi·tiān hē kā·fēi.','Ngày nào tôi cũng uống cà phê.'],['早上','zǎo·shang','buổi sáng','morning','早上好！','Zǎo·shang hǎo!','Chào buổi sáng!'],['晚上','wǎn·shang','buổi tối','evening','晚上我看书。','Wǎn·shang wǒ kàn shū.','Buổi tối tôi đọc sách.'],['然后','rán·hòu','sau đó','then','我先吃饭，然后上班。','Wǒ xiān chī fàn, rán·hòu shàng·bān.','Tôi ăn trước, sau đó đi làm.']],
+ ew:[["commute","đi lại (nhà – chỗ làm)","My commute takes about 40 minutes.","danh từ & động từ"],["rush hour","giờ cao điểm","I try to leave before rush hour.",""],["routine","thói quen hằng ngày","My morning routine is quite simple.","daily routine"],["work overtime","làm thêm giờ","We often work overtime at the end of the month.",""],["unwind","thư giãn","I unwind by listening to music.","= relax"],["a typical day","một ngày điển hình","On a typical day, I check emails first.","IELTS hay hỏi"],["juggle","xoay xở nhiều việc cùng lúc","It's hard to juggle work and study.","juggle A and B"],["run errands","chạy việc vặt","I run errands on Saturday mornings.",""]],
+ zp:[{t:'Thời gian + động từ (thói quen)',f:'Chủ ngữ + 每天 / giờ + động từ',n:'Mốc thời gian đặt trước động từ. Có thể đưa lên đầu câu: 每天早上我喝咖啡。',ex:[['我每天七点起床。','Wǒ měi·tiān qī diǎn qǐ·chuáng.','Mỗi ngày tôi dậy lúc bảy giờ.'],['晚上我学习中文。','Wǎn·shang wǒ xué·xí Zhōng·wén.','Buổi tối tôi học tiếng Trung.']]},
+     {t:'Trước … sau đó …: 先…然后…',f:'先 + việc 1，然后 + việc 2',n:'Dùng để kể trình tự các việc trong ngày.',ex:[['我先洗澡，然后睡觉。','Wǒ xiān xǐ·zǎo, rán·hòu shuì·jiào.','Tôi tắm trước, rồi đi ngủ.'],['先吃饭，然后工作。','Xiān chī fàn, rán·hòu gōng·zuò.','Ăn trước, rồi làm việc.']]},
+     {t:'Ở đâu làm gì: 在 + nơi chốn + động từ',f:'Chủ ngữ + 在 + nơi + động từ',n:'Nơi chốn cũng đứng trước động từ, ngược với tiếng Việt “làm việc ở công ty”.',ex:[['我在家学习。','Wǒ zài jiā xué·xí.','Tôi học ở nhà.'],['她在公司工作。','Tā zài gōng·sī gōng·zuò.','Cô ấy làm việc ở công ty.']]}],
+ zq:[['“Tôi học ở nhà”:','我在家学习。',['我学习在家。','在家学习我在。','我家在学习。']],['“Mỗi ngày tôi dậy lúc 6 giờ”:','我每天六点起床。',['我起床每天六点。','起床我每天六点。','我每天起床六点。']],['先…然后… nghĩa là?','Trước … sau đó …',['Vì … nên …','Nếu … thì …','Vừa … vừa …']],['下班 là?','Tan làm',['Đi làm','Đi học','Đi ngủ']],['“Buổi tối” là?','晚上',['早上','中午','今天']]],
+ eg:{t:'Adverbs of frequency: always, usually, often…',note:"<p><b>always</b> (100%) › <b>usually</b> › <b>often</b> › <b>sometimes</b> › <b>rarely</b> › <b>never</b> (0%).</p><ul><li>Đứng <b>trước động từ thường</b>: I usually get up at 6.</li><li>Đứng <b>sau to be</b>: I'm always busy on Mondays.</li><li>Hỏi: How often do you…?</li></ul>",ex:[["I usually leave home at 7:15.","Tôi thường rời nhà lúc 7:15."],["We often work overtime at month-end.","Chúng tôi hay làm thêm giờ vào cuối tháng."],["I'm rarely late for work.","Tôi hiếm khi đi làm trễ."]],mis:[["I go always to work by motorbike.","I always go to work by motorbike.","Trạng từ đứng trước động từ thường."],["I always am tired.","I am always tired.","Đứng sau to be."],["How much often do you exercise?","How often do you exercise?","Chỉ dùng How often."]]},
+ eq:[["I ___ to work by bus.","usually go",["go usually","usually going","am usually go"]],["She ___ late.","is never",["never is","never be","is never be"]],["___ do you work overtime?","How often",["How much","How long often","What often"]],["“Giờ cao điểm”:","rush hour",["busy clock","peak hour time","crowd hour"]],["After work, I ___ by reading. (thư giãn)","unwind",["commute","juggle","run errands"]]],
+ dl:[['Minh','你每天几点起床？','Nǐ měi·tiān jǐ diǎn qǐ·chuáng?','Mỗi ngày bạn dậy lúc mấy giờ?'],['Vi','我六点半起床。','Wǒ liù diǎn bàn qǐ·chuáng.','Tôi dậy lúc sáu rưỡi.'],['Minh','你几点上班？','Nǐ jǐ diǎn shàng·bān?','Bạn đi làm lúc mấy giờ?'],['Vi','八点。我先喝咖啡，然后上班。','Bā diǎn. Wǒ xiān hē kā·fēi, rán·hòu shàng·bān.','Tám giờ. Tôi uống cà phê trước rồi đi làm.'],['Minh','晚上你做什么？','Wǎn·shang nǐ zuò shén·me?','Buổi tối bạn làm gì?'],['Vi','晚上我学习中文。','Wǎn·shang wǒ xué·xí Zhōng·wén.','Buổi tối tôi học tiếng Trung.']],
+ sp:[{q:"Can you describe a typical day for you?",a:"On a typical day, I get up at around six thirty and commute to work by motorbike. I spend the morning checking invoices and the afternoon on reconciliations. After work, I usually unwind by studying a bit of Chinese.",ph:["On a typical day, I…","I spend the morning …-ing","After work, I usually…"]},{q:"Do you like having a routine?",a:"Yes, I do. Having a routine helps me stay organised and stops me from forgetting things. That said, I like to do something different at weekends so I don't get bored.",ph:["Having a routine helps me…","That said,…","so I don't get bored"]}]},
+
+{vi:'Mua sắm',en:'Shopping',hz:'买',
+ zw:[['买','mǎi','mua','to buy','我想买这个。','Wǒ xiǎng mǎi zhè·ge.','Tôi muốn mua cái này.'],['卖','mài','bán','to sell','这里卖咖啡吗？','Zhè·lǐ mài kā·fēi ma?','Ở đây có bán cà phê không?'],['钱','qián','tiền','money','多少钱？','Duō·shao qián?','Bao nhiêu tiền?'],['块','kuài','đồng (tệ, khẩu ngữ)','yuan (spoken)','十块','shí kuài','mười tệ'],['贵','guì','đắt','expensive','太贵了！','Tài guì le!','Đắt quá!'],['便宜','pián·yi','rẻ','cheap','便宜一点儿吧。','Pián·yi yì·diǎnr ba.','Rẻ chút đi.'],['这个','zhè·ge','cái này','this one','这个多少钱？','Zhè·ge duō·shao qián?','Cái này bao nhiêu tiền?'],['那个','nà·ge','cái kia','that one','我要那个。','Wǒ yào nà·ge.','Tôi lấy cái kia.'],['可以','kě·yǐ','có thể, được','can, may','可以试试吗？','Kě·yǐ shì·shi ma?','Thử được không?'],['衣服','yī·fu','quần áo','clothes','这件衣服很好看。','Zhè jiàn yī·fu hěn hǎo·kàn.','Bộ đồ này đẹp.']],
+ ew:[["receipt","biên lai","Could I have a receipt, please?","p câm: /rɪˈsiːt/"],["refund","hoàn tiền","I'd like a refund for this item.","get / ask for a refund"],["discount","giảm giá","Is there a discount for members?","a 10% discount"],["bargain","món hời; mặc cả","This jacket was a real bargain.","động từ: mặc cả"],["afford","đủ khả năng chi trả","I can't afford a new laptop right now.","can't afford + N / to V"],["browse","xem lướt","I'm just browsing, thanks.","câu hay dùng trong cửa hàng"],["impulse buying","mua sắm bốc đồng","Online sales encourage impulse buying.",""],["value for money","đáng đồng tiền","This phone is good value for money.",""]],
+ zp:[{t:'Hỏi giá: … 多少钱？',f:'Đồ vật + 多少钱？',n:'Trả lời: số + 块 (khẩu ngữ, = 元 yuán). Số 2 dùng 两: 两块.',ex:[['这个多少钱？','Zhè·ge duō·shao qián?','Cái này bao nhiêu tiền?'],['二十五块。','Èr·shí·wǔ kuài.','25 tệ.'],['两块钱。','Liǎng kuài qián.','Hai tệ.']]},
+     {t:'Quá …: 太 + tính từ + 了',f:'太 + tính từ + 了',n:'Diễn tả mức độ quá, thường kèm cảm xúc.',ex:[['太贵了！','Tài guì le!','Đắt quá!'],['太好了！','Tài hǎo le!','Tuyệt quá!']]},
+     {t:'Mặc cả nhẹ nhàng',f:'Tính từ + 一点儿 + 吧',n:'一点儿 = một chút; 吧 làm câu thành lời đề nghị mềm mỏng.',ex:[['便宜一点儿吧。','Pián·yi yì·diǎnr ba.','Rẻ chút đi.'],['可以便宜一点儿吗？','Kě·yǐ pián·yi yì·diǎnr ma?','Bớt chút được không?']]}],
+ zq:[['“Cái này bao nhiêu tiền?”:','这个多少钱？',['多少钱这个是？','这个钱多少？','这个几钱？']],['“Đắt quá!”:','太贵了！',['很贵了太！','贵太了！','太了贵！']],['便宜 nghĩa là?','Rẻ',['Đắt','Đẹp','Mới']],['“2 tệ” nói là?','两块',['二块','两个块','块两']],['“Bớt chút đi”:','便宜一点儿吧。',['一点儿便宜吧。','吧便宜一点儿。','便宜吧一点儿。']]],
+ eg:{t:'Comparatives: cheaper than / more expensive than',note:"<ul><li>Tính từ ngắn: <b>-er … than</b>: cheap → cheaper than</li><li>Tính từ dài: <b>more … than</b>: more expensive than</li><li>Bất quy tắc: good → <b>better</b>, bad → <b>worse</b></li><li>Nhấn mạnh: <b>much / a lot / slightly</b> cheaper</li></ul>",ex:[["Online shopping is often cheaper than shopping in malls.","Mua online thường rẻ hơn mua ở trung tâm thương mại."],["This model is slightly more expensive, but it's better value for money.","Mẫu này đắt hơn một chút nhưng đáng tiền hơn."],["Prices are much higher than last year.","Giá cao hơn nhiều so với năm ngoái."]],mis:[["more cheaper","cheaper","Không dùng more với dạng -er."],["expensiver","more expensive","Tính từ dài dùng more."],["more better","better","better đã là so sánh hơn."]]},
+ eq:[["This shop is ___ than that one.","cheaper",["more cheap","more cheaper","cheapest"]],["Shopping online is ___ than going to the mall.","more convenient",["convenienter","more convenienter","most convenient"]],["The new version is ___ than the old one.","better",["gooder","more better","more good"]],["“Tôi chỉ xem thôi”:","I'm just browsing.",["I'm just watching shopping.","I just see only.","I'm only bargaining."]],["Hàng lỗi, bạn muốn lấy lại tiền:","ask for a refund",["ask for a receipt","ask for a bargain","ask for a discount"]]],
+ dl:[['Vi','这件衣服多少钱？','Zhè jiàn yī·fu duō·shao qián?','Bộ đồ này bao nhiêu tiền?'],['Người bán','三百块。','Sān·bǎi kuài.','300 tệ.'],['Vi','太贵了！便宜一点儿吧。','Tài guì le! Pián·yi yì·diǎnr ba.','Đắt quá! Bớt chút đi.'],['Người bán','两百五，可以吗？','Liǎng·bǎi wǔ, kě·yǐ ma?','250 được không?'],['Vi','好，我要了。','Hǎo, wǒ yào le.','Được, tôi lấy.']],
+ sp:[{q:"Do you enjoy shopping?",a:"It depends. I enjoy browsing for books and small things for my home, but I don't like shopping for clothes in crowded malls. I try to avoid impulse buying and only get what I need.",ph:["It depends.","I enjoy …, but I don't like…","I try to avoid…"]},{q:"Do you prefer shopping online or in stores?",a:"Mostly online, because it's more convenient and often cheaper. I can compare prices easily and read reviews. However, for things like shoes, I still prefer to try them on in a store.",ph:["Mostly online, because…","I can compare prices","However, for … I still prefer…"]}]},
+
+{vi:'Công việc & văn phòng',en:'Work & office',hz:'公司',
+ zw:[['公司','gōng·sī','công ty','company','我们公司很大。','Wǒ·men gōng·sī hěn dà.','Công ty chúng tôi rất lớn.'],['同事','tóng·shì','đồng nghiệp','colleague','她是我的同事。','Tā shì wǒ de tóng·shì.','Cô ấy là đồng nghiệp của tôi.'],['老板','lǎo·bǎn','sếp','boss','老板今天不在。','Lǎo·bǎn jīn·tiān bú zài.','Hôm nay sếp không có ở đây.'],['会计','kuài·jì','kế toán','accountant','我是会计。','Wǒ shì kuài·jì.','Tôi là kế toán.'],['开会','kāi·huì','họp','to have a meeting','我们十点开会。','Wǒ·men shí diǎn kāi·huì.','Mười giờ chúng ta họp.'],['忙','máng','bận','busy','月底很忙。','Yuè·dǐ hěn máng.','Cuối tháng rất bận.'],['电脑','diàn·nǎo','máy tính','computer','我的电脑很慢。','Wǒ de diàn·nǎo hěn màn.','Máy tính của tôi rất chậm.'],['邮件','yóu·jiàn','email, thư','email','我给你发邮件。','Wǒ gěi nǐ fā yóu·jiàn.','Tôi gửi email cho bạn.'],['发票','fā·piào','hóa đơn','invoice','请给我发票。','Qǐng gěi wǒ fā·piào.','Vui lòng cho tôi hóa đơn.'],['办公室','bàn·gōng·shì','văn phòng','office','老板在办公室。','Lǎo·bǎn zài bàn·gōng·shì.','Sếp ở trong văn phòng.']],
+ ew:[["invoice","hóa đơn","Please send us the invoice by Friday.","issue an invoice = xuất hóa đơn"],["reconcile","đối chiếu (sổ sách)","I reconcile the bank statement every week.","reconciliation (n)"],["submit","nộp","Please submit your expense report by the 5th.",""],["approve","phê duyệt","The manager approved the payment.","approval (n)"],["workload","khối lượng công việc","My workload is heavy at month-end.","a heavy / light workload"],["be in charge of","phụ trách","I'm in charge of accounts receivable.",""],["attention to detail","sự tỉ mỉ","Accounting requires attention to detail.",""],["follow up","theo dõi, nhắc lại","I'll follow up with the client tomorrow.","follow up on + việc"]],
+ zp:[{t:'很 / 不 + tính từ',f:'Chủ ngữ + 很 / 不 + tính từ',n:'今天很忙 (hôm nay bận) · 今天不忙 (hôm nay không bận). Không dùng 是.',ex:[['我今天很忙。','Wǒ jīn·tiān hěn máng.','Hôm nay tôi rất bận.'],['工作不难。','Gōng·zuò bù nán.','Công việc không khó.']]},
+     {t:'Ở / không ở: 在 làm động từ',f:'Người + (不) 在 + nơi',n:'在 vừa là “ở” (động từ), vừa đứng trước nơi chốn của hành động (bài trước).',ex:[['老板在办公室。','Lǎo·bǎn zài bàn·gōng·shì.','Sếp ở văn phòng.'],['他不在。','Tā bú zài.','Anh ấy không có ở đây.']]},
+     {t:'Làm gì cho ai: 给 + người + động từ',f:'A + 给 + B + động từ + vật',n:'给 (gěi) = cho, đặt trước người nhận.',ex:[['我给你发邮件。','Wǒ gěi nǐ fā yóu·jiàn.','Tôi gửi email cho bạn.'],['请给我发票。','Qǐng gěi wǒ fā·piào.','Vui lòng đưa tôi hóa đơn.']]}],
+ zq:[['“Hôm nay tôi không bận”:','我今天不忙。',['我今天是不忙。','我不今天忙。','我今天忙不。']],['“Sếp không có ở đây”:','老板不在。',['老板没是。','老板不是在。','老板在不。']],['“Tôi gửi email cho bạn”:','我给你发邮件。',['我发给邮件你。','给我你发邮件。','我你给发邮件。']],['发票 là?','Hóa đơn',['Email','Hợp đồng','Máy tính'],'发票 fāpiào là hóa đơn.'],['会计 đọc là?','kuàijì',['huìjì','kuàijí','huìjí'],'会 trong 会计 đọc kuài.']],
+ eg:{t:'Present continuous: việc đang làm, tạm thời',note:"<p><b>am / is / are + V-ing</b> cho việc đang diễn ra hoặc chỉ tạm thời trong giai đoạn này.</p><ul><li>I work in accounting. (cố định)</li><li>I'm working on the year-end report this week. (tạm thời)</li><li>Không dùng V-ing với động từ trạng thái: know, need, want, like</li></ul>",ex:[["I'm reconciling the October invoices at the moment.","Tôi đang đối chiếu hóa đơn tháng 10."],["We're hiring a new assistant this month.","Tháng này chúng tôi đang tuyển trợ lý mới."],["She usually works from home, but this week she's working in the office.","Cô ấy thường làm ở nhà, nhưng tuần này đang làm ở văn phòng."]],mis:[["I'm needing more time.","I need more time.","need là động từ trạng thái."],["She working on it now.","She is working on it now.","Thiếu is."],["Look! He calls the client.","Look! He's calling the client.","Việc đang xảy ra lúc nói."]]},
+ eq:[["This week I ___ on the year-end report.","'m working",["work","working","am work"]],["I ___ more time to finish this.","need",["am needing","needing","am need"]],["I'm in charge ___ accounts payable.","of",["for","with","on"]],["“Phê duyệt khoản thanh toán”:","approve the payment",["accept the paying","agree the pay","prove the payment"]],["“Tôi sẽ nhắc lại với khách ngày mai”:","I'll follow up with the client tomorrow.",["I'll follow the client up to tomorrow.","I'll remind up the client tomorrow.","I'll follow after the client tomorrow."]]],
+ dl:[['Đồng nghiệp','小薇，你忙吗？','Xiǎo Wēi, nǐ máng ma?','Tiểu Vi, bạn bận không?'],['Vi','很忙，今天有很多发票。','Hěn máng, jīn·tiān yǒu hěn duō fā·piào.','Rất bận, hôm nay có nhiều hóa đơn.'],['Đồng nghiệp','我们十点开会。','Wǒ·men shí diǎn kāi·huì.','Mười giờ chúng ta họp nhé.'],['Vi','好的。老板在办公室吗？','Hǎo de. Lǎo·bǎn zài bàn·gōng·shì ma?','Được. Sếp có ở văn phòng không?'],['Đồng nghiệp','他不在。','Tā bú zài.','Sếp không có ở đây.']],
+ sp:[{q:"What do you like about your job?",a:"I like the fact that my work has a clear purpose. When I reconcile accounts and everything matches, I feel a real sense of achievement. I also have supportive colleagues, which makes a heavy workload more manageable.",ph:["I like the fact that…","I feel a real sense of achievement","which makes … more manageable"]},{q:"Is there anything you would like to change about your job?",a:"If I could change one thing, I'd automate more of the repetitive tasks, like entering invoice data. That would give me more time to focus on analysis and following up with clients.",ph:["If I could change one thing, I'd…","That would give me more time to…"]}]}
+];
+const LATER=[
+ {t:'Giai đoạn 3 · Chữ Hán',items:['Nhận diện 100 chữ thông dụng','Bộ thủ','Cấu tạo chữ','Thứ tự nét','Tập viết chữ cơ bản']},
+ {t:'Giai đoạn 4 · Nghe & nói',items:['Hội thoại tình huống tiếng Trung','Nghe câu ngắn, đoán ý','Nhại giọng (shadowing) hai ngôn ngữ']},
+ {t:'Giai đoạn 5 · Kỹ năng IELTS',items:['Speaking Part 2 & 3','Writing Task 1: mô tả số liệu','Reading: skimming & scanning','Listening: các dạng câu hỏi']}
+];
+
+/* ========== the path: one bilingual sequence of days ========== */
+const PART={A:{t:'Từ mới',min:12},B:{t:'Mẫu câu & ngữ pháp',min:15},C:{t:'Hội thoại & nói',min:15}};
+const DAYS=[];
+ZHP.forEach((z,k)=>DAYS.push({phase:1,k,zh:z.t,en:ENP[k].t,min:12}));
+UNITS.forEach((u,ui)=>['A','B','C'].forEach(p=>DAYS.push({phase:2,ui,p,zh:p==='A'?'Từ mới chủ đề':p==='B'?u.zp.map(x=>x.t.split(':')[0]).slice(0,2).join(' · '):'Hội thoại',en:p==='A'?'Vocabulary':p==='B'?u.eg.t.split(':')[0]:'Speaking Part 1',min:PART[p].min})));
+const dayTitle=d=>d.phase===1?`Nền âm thanh ${d.k+1}`:`${UNITS[d.ui].vi} · ${PART[d.p].t}`;
+
+/* ========== flashcard index (review deck) ========== */
+const CARD={};const IDX={};
+UNITS.forEach(u=>{u.zw.forEach(w=>{CARD['zw:'+w[0]]={lang:'zh',hz:w[0],py:w[1],vi:w[2],en:w[3],ex:w[4],exPy:w[5],exVi:w[6]};IDX[w[0]]={hz:w[0],py:w[1],vi:w[2]}});
+  u.ew.forEach(w=>{CARD['ew:'+w[0]]={lang:'en',w:w[0],vi:w[1],ex:w[2],note:w[3]}});
+  u.zp.forEach(p=>{const e=p.ex[0];CARD['zs:'+e[0]]={lang:'zh',hz:e[0],py:e[1],vi:e[2],sent:true}})});
+TS.forEach(([b,h,m])=>h.forEach((z,i)=>{if(z&&!IDX[z])IDX[z]={hz:z,py:mark(b,i+1),vi:m[i]}}));
+PAIRS.forEach(([a,b])=>[a,b].forEach(([p,z,v])=>{if(!IDX[z])IDX[z]={hz:z,py:p,vi:v}}));
+WORDS.forEach(([z,p,v])=>{IDX[z]={hz:z,py:p,vi:v}});
+const ENIDX={};UNITS.forEach(u=>u.ew.forEach(w=>ENIDX[w[0]]={w:w[0],vi:w[1],ex:w[2]}));
+
+/* ========== state & sync ========== */
+const LS='lingua-garden.v2';
+function norm(s){try{s=JSON.parse(JSON.stringify(s||{}))}catch(e){s={}}if(!s||typeof s!=='object')s={};const o=x=>x&&typeof x==='object'&&!Array.isArray(x)?x:{};return{done:o(s.done),games:o(s.games),srs:o(s.srs),saved:Array.isArray(s.saved)?s.saved.filter(x=>typeof x==='string'):[],days:Array.isArray(s.days)?s.days.filter(x=>typeof x==='string'):[],rate:typeof s.rate==='number'?s.rate:0.8}}
+function loadLocal(){try{const v2=localStorage.getItem(LS);if(v2)return norm(JSON.parse(v2));const v1=JSON.parse(localStorage.getItem('lingua-garden.v1')||'null');if(v1)return norm({saved:v1.saved,days:v1.days,games:v1.games,rate:v1.rate})}catch(e){}return norm(null)}
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
+function merge(a,b){const o=norm(a);for(const k in b.done){const x=o.done[k]||{},y=b.done[k]||{};o.done[k]={done:!!(x.done||y.done),best:Math.max(x.best||0,y.best||0)}}for(const k in b.games){const x=o.games[k]||{},y=b.games[k]||{};o.games[k]={best:Math.max(x.best||0,y.best||0),plays:Math.max(x.plays||0,y.plays||0)}}for(const k in b.srs){const x=o.srs[k],y=b.srs[k];if(!x||(y&&(y.d||'')>(x.d||'')))o.srs[k]=y}o.saved=[...new Set([...o.saved,...b.saved])];o.days=[...new Set([...o.days,...b.days])].sort();return o}
+let state=loadLocal();
+const cloud={ref:null,timer:null,chain:Promise.resolve()};
+function setSync(s){const el=$('#sync');if(!el)return;el.dataset.s=s;el.querySelector('span').textContent={cloud:'Đã đồng bộ',loading:'Đang đồng bộ…',local:'Lưu trên máy này',retry:'Chưa đồng bộ được'}[s]||''}
+function save(){saveLocal();pushCloud();updateBadge()}
+function pushCloud(){if(!cloud.ref)return;clearTimeout(cloud.timer);cloud.timer=setTimeout(()=>{const body=JSON.parse(JSON.stringify(state));setSync('loading');cloud.chain=cloud.chain.then(()=>cloud.ref.set(body)).then(()=>setSync('cloud')).catch(e=>setSync(e&&e.code==='invalid_argument'?'local':'retry'))},1200)}
+async function initCloud(){
+  if(!window.claude||typeof window.claude.use!=='function')return;
+  try{const[db,user]=await Promise.all([claude.use('db'),claude.use('user')]);if(!db||!user)return;const id=await user.id();if(!id)return;
+    cloud.ref=db.doc('data/users/'+id+'/progress-v2');setSync('loading');
+    const snap=await Promise.race([cloud.ref.get(),new Promise((_,r)=>setTimeout(()=>r({code:'timeout'}),10000))]);
+    if(snap.exists){const remote=norm(snap.data());const merged=merge(state,remote);const changed=JSON.stringify(merged)!==JSON.stringify(merge(remote,remote));state=merged;saveLocal();if(!QUIZ&&!PLAYER)render();if(changed)pushCloud();else setSync('cloud')}else pushCloud()
+  }catch(e){setSync(cloud.ref?'retry':'local')}}
+function recordDay(){const t=TODAY();if(!state.days.includes(t)){state.days.push(t);state.days.sort()}}
+function streak(){const set=new Set(state.days);const d=new Date();if(!set.has(ymd(d)))d.setDate(d.getDate()-1);let n=0;while(set.has(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+const INT=[1,2,4,7,15,30];
+function addCards(ids){ids.forEach(id=>{if(CARD[id]&&!state.srs[id])state.srs[id]={b:0,d:addDays(1)}})}
+const dueIds=()=>{const t=TODAY();return Object.keys(state.srs).filter(id=>CARD[id]&&(state.srs[id].d||'')<=t)};
+function updateBadge(){const b=$('#dueBadge');if(!b)return;const n=dueIds().length;b.hidden=!n;b.textContent=n}
+
+/* ========== progress helpers ========== */
+const isDone=n=>!!(state.done[n]&&state.done[n].done);
+const unlocked=n=>n===0||isDone(n-1);
+const doneCount=()=>DAYS.filter((_,i)=>isDone(i)).length;
+const nextDay=()=>{for(let n=0;n<DAYS.length;n++)if(!isDone(n))return n;return null};
+function plant(n,total){const lv=Math.round(n/total*10);const h=14+lv*7;let leaves='';for(let k=0;k<Math.min(lv,9);k++){const y=100-12-k*7;const s=k%2?1:-1;leaves+=`<path d="M60 ${y} q ${s*14} -11 ${s*24} -3 q ${-s*11} 9 ${-s*24} 3z" fill="var(--jade)" opacity="${.55+k*.05}"/>`}const flower=lv>=10?`<g transform="translate(60 ${100-h})">${[0,72,144,216,288].map(a=>`<ellipse rx="5" ry="9" transform="rotate(${a}) translate(0 -8)" fill="var(--seal)"/>`).join('')}<circle r="5" fill="var(--gold)"/></g>`:`<circle cx="60" cy="${100-h}" r="3.5" fill="var(--jade)"/>`;return`<svg class="plant" viewBox="0 0 120 110" aria-hidden="true"><path d="M28 101h64" stroke="var(--line)" stroke-width="4" stroke-linecap="round"/><path d="M60 100V${100-h}" stroke="var(--jade)" stroke-width="3" stroke-linecap="round"/>${leaves}${flower}</svg>`}
+
+/* ========== lesson steps ========== */
+const wordCardZh=w=>`<div class="wcard"><button class="hzbig" data-say="${esc(w[0])}">${esc(w[0])}</button><div class="pybig">${colorPy(w[1])}</div><div class="mean"><b>${esc(w[2])}</b> · <span class="muted">${esc(w[3])}</span></div><div class="ex">${playZh(w[4])}<div class="tx"><span class="hz">${esc(w[4])}</span><span class="py">${colorPy(w[5])}</span><span class="muted small">${esc(w[6])}</span></div></div>${saveBtn(w[0])}</div>`;
+const wordCardEn=w=>`<div class="wcard"><button class="wbig" data-say-en="${esc(w[0])}">${esc(w[0])}</button><div class="mean"><b>${esc(w[1])}</b></div>${w[3]?`<p class="small muted">${esc(w[3])}</p>`:''}<div class="ex">${playEn(w[2])}<div class="tx"><span>${esc(w[2])}</span></div></div>${saveBtn('en:'+w[0])}</div>`;
+const exRowsZh=ex=>`<div class="exlist">${ex.map(e=>`<div class="exrow">${playZh(e[0])}<div class="tx"><span class="hz">${esc(e[0])}</span><span class="py">${colorPy(e[1])}</span><span class="small muted">${esc(e[2])}</span></div></div>`).join('')}</div>`;
+const exRowsEn=ex=>`<div class="exlist">${ex.map(e=>`<div class="exrow">${playEn(e[0])}<div class="tx"><span class="en">${esc(e[0])}</span><span class="small muted">${esc(e[1])}</span></div></div>`).join('')}</div>`;
+function unitQuizVocab(u,nz,ne){const zw=u.zw,ew=u.ew;const qs=[];
+  sample(zw,nz).forEach((w,i)=>{if(i%2===0)qs.push({say:w[0],prompt:'Nghe và chọn nghĩa',show:`<span class="hz">${esc(w[0])}</span>`,opts:shuffle([opt(esc(w[2]),1),...sample(zw.filter(x=>x!==w),3).map(x=>opt(esc(x[2])))]),explain:revealZh(w[0],w[1],w[2])});
+    else qs.push({prompt:'Chọn Pinyin đúng',show:`<span class="hz">${esc(w[0])}</span><span class="muted">${esc(w[2])}</span>`,opts:shuffle([opt(pyOpt(disp(w[1])),1),...wordVariants(w[1],3).map(s=>opt(pyOpt(s)))]),after:w[0],explain:revealZh(w[0],w[1],w[2])})});
+  sample(ew,ne).forEach((w,i)=>{const re=new RegExp(w[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i');if(i%2===1&&re.test(w[2]))qs.push({prompt:'Chọn từ phù hợp điền vào chỗ trống',show:`<span class="sent">${esc(w[2].replace(re,'_____'))}</span>`,opts:shuffle([opt(`<b>${esc(w[0])}</b>`,1),...sample(ew.filter(x=>x!==w),3).map(x=>opt(`<b>${esc(x[0])}</b>`))]),explain:revealEn(w[0],w[1],w[2])});
+    else qs.push({sayEn:w[0],prompt:'Từ này nghĩa là gì?',show:`<span class="w">${esc(w[0])}</span>`,opts:shuffle([opt(esc(w[1]),1),...sample(ew.filter(x=>x!==w),3).map(x=>opt(esc(x[1])))]),explain:revealEn(w[0],w[1],w[2])})});
+  return qs}
+const authored=(rows,n)=>sample(rows,n).map(r=>qText(r[0],r[1],r[2],r[3]));
+function buildSteps(n){const d=DAYS[n];const S=[];
+  S.push({kind:'goal'});
+  if(d.phase===1){const z=ZHP[d.k],e=ENP[d.k];
+    S.push({lang:'zh',title:z.t,html:()=>`<div class="prose">${z.learn()}</div>`});
+    S.push({lang:'zh',title:'Luyện tập',quiz:()=>z.quiz()});
+    S.push({lang:'en',title:e.t,html:()=>`<div class="prose">${e.learn()}</div>`});
+    S.push({lang:'en',title:'Luyện tập',quiz:()=>e.quiz()});}
+  else{const u=UNITS[d.ui];
+    if(d.p==='A'){u.zw.forEach((w,i)=>S.push({lang:'zh',title:`Từ mới ${i+1}/${u.zw.length}`,say:w[0],html:()=>wordCardZh(w)}));
+      u.ew.forEach((w,i)=>S.push({lang:'en',title:`Vocabulary ${i+1}/${u.ew.length}`,sayEn:w[0],html:()=>wordCardEn(w)}));
+      S.push({lang:'mix',title:'Luyện tập',quiz:()=>shuffle(unitQuizVocab(u,4,4))});
+      S.cards=[...u.zw.map(w=>'zw:'+w[0]),...u.ew.map(w=>'ew:'+w[0])];}
+    if(d.p==='B'){u.zp.forEach(p=>S.push({lang:'zh',title:p.t,html:()=>`<div class="fbox">${hzWrap(p.f)}</div><p>${hzWrap(p.n)}</p>${exRowsZh(p.ex)}`}));
+      S.push({lang:'en',title:u.eg.t,html:()=>`<div class="prose">${u.eg.note}</div>${exRowsEn(u.eg.ex)}`});
+      S.push({lang:'en',title:'Lỗi người Việt hay mắc',html:()=>`<div class="mistakes">${u.eg.mis.map(m=>`<div class="mis"><span class="x">✗ ${esc(m[0])}</span><span class="v">✓ ${esc(m[1])}</span><span class="small muted">${esc(m[2])}</span></div>`).join('')}</div>`});
+      S.push({lang:'mix',title:'Luyện tập',quiz:()=>shuffle([...authored(u.zq,4),...authored(u.eq,4)])});
+      S.cards=u.zp.map(p=>'zs:'+p.ex[0][0]);}
+    if(d.p==='C'){S.push({lang:'zh',title:'Hội thoại',html:()=>dialogueHtml(u)});
+      S.push({lang:'zh',title:'Nói theo (shadowing)',html:()=>`<p>Nghe từng câu rồi nói theo ngay, cố bắt chước cả thanh điệu. Mỗi câu nói 3 lần.</p><div class="exlist">${u.dl.map(l=>`<div class="exrow">${playZh(l[1])}<div class="tx"><span class="hz">${esc(l[1])}</span><span class="py">${colorPy(l[2])}</span></div></div>`).join('')}</div><div class="note"><p>Mẹo: nói nhỏ cũng được, quan trọng là mở miệng. Lần thứ ba thử không nhìn Pinyin.</p></div>`});
+      u.sp.forEach((s,i)=>S.push({lang:'en',title:`Speaking ${i+1}/${u.sp.length}`,sayEn:s.q,html:()=>speakHtml(s,i)}));
+      S.push({lang:'mix',title:'Ôn tập cả chủ đề',quiz:()=>shuffle([...unitQuizVocab(u,2,2),...authored(u.zq,2),...authored(u.eq,2)])});}
+  }
+  S.push({kind:'summary'});return S}
+function dialogueHtml(u){return`<div class="row"><button class="play" data-act="playDialog" data-u="${UNITS.indexOf(u)}">${ICON.play}<span>Nghe cả đoạn</span></button><div class="seg" role="group" aria-label="Hiển thị"><button data-act="toggleDl" data-c="hide-py" aria-pressed="false">Ẩn Pinyin</button><button data-act="toggleDl" data-c="hide-vi" aria-pressed="false">Ẩn nghĩa</button></div></div><div class="dlg" id="dlg">${u.dl.map(l=>`<div class="dl"><span class="who">${esc(l[0])}</span>${playZh(l[1])}<div class="tx"><span class="hz">${esc(l[1])}</span><span class="py">${colorPy(l[2])}</span><span class="small muted vi">${esc(l[3])}</span></div></div>`).join('')}</div>`}
+function speakHtml(s,i){return`<p class="eyebrow">IELTS Speaking · Part 1</p><div class="row"><button class="play en big" data-say-en="${esc(s.q)}">${ICON.play}<span>${esc(s.q)}</span></button></div>
+  <div class="card"><p><b>Bước 1.</b> Tự trả lời thành tiếng trong 30–45 giây. Đừng lo sai, cứ nói.</p><div class="row"><span class="timer" id="tmr">0:45</span><button class="btn" data-act="timer">Bắt đầu đếm giờ</button></div></div>
+  <div class="card"><p><b>Bước 2.</b> Xem câu trả lời mẫu, nghe và nói theo.</p><button class="btn" data-act="showSample" data-i="${i}">Xem câu trả lời mẫu</button><div id="sample${i}" hidden><div class="sample"><div class="row">${playEn(s.a)}<span class="small muted">Câu trả lời mẫu (band 6.5–7). Hãy thay bằng thông tin của bạn.</span></div><p>${esc(s.a)}</p><div class="chips">${s.ph.map(p=>enChip(p)).join('')}</div></div></div></div>`}
+
+/* ========== player ========== */
+let PLAYER=null;
+function viewDay(n){const d=DAYS[n];if(!d)return viewPath();
+  if(!unlocked(n)){PLAYER=null;return`<div class="card"><p class="eyebrow">Ngày ${n+1}</p><h2>${esc(dayTitle(d))}</h2><p class="muted">Ngày này mở khi bạn hoàn thành Ngày ${n}.</p><div class="row"><button class="btn primary" data-act="go" data-to="day-${n-1}">Đến Ngày ${n}</button></div></div>`}
+  PLAYER={n,steps:buildSteps(n),i:0,res:{},finished:false};return`<div class="player" id="player"></div>`}
+function renderStep(){const P=PLAYER;if(!P)return;const st=P.steps[P.i],d=DAYS[P.n];QUIZ=null;
+  const pct=Math.round(P.i/(P.steps.length-1)*100);let body='',foot=true;
+  if(st.kind==='goal'){const items=d.phase===1?[[LZH,ZHP[d.k].t,ZHP[d.k].d],[LEN,ENP[d.k].t,ENP[d.k].d]]:d.p==='A'?[[LZH,`${UNITS[d.ui].zw.length} từ mới`,UNITS[d.ui].zw.map(w=>w[0]).join(' · ')],[LEN,`${UNITS[d.ui].ew.length} từ / cụm từ`,UNITS[d.ui].ew.slice(0,4).map(w=>w[0]).join(', ')+'…'],[LMIX,'Luyện tập 8 câu','']]:d.p==='B'?[[LZH,'Mẫu câu',UNITS[d.ui].zp.map(p=>p.t).join(' · ')],[LEN,'Ngữ pháp',UNITS[d.ui].eg.t],[LMIX,'Luyện tập 8 câu','']]:[[LZH,'Hội thoại + nói theo',`${UNITS[d.ui].dl.length} câu`],[LEN,'IELTS Speaking Part 1',UNITS[d.ui].sp.map(s=>s.q).join(' / ')],[LMIX,'Ôn tập cả chủ đề','8 câu']];
+    body=`<div class="pstep-head"><p class="eyebrow">Ngày ${P.n+1}/${DAYS.length} · ${d.phase===1?'Giai đoạn 1 · Nền âm thanh':'Giai đoạn 2 · Giao tiếp theo chủ đề'}</p><h1>${esc(dayTitle(d))}</h1><p class="sub">Khoảng ${d.min} phút. Hôm nay bạn sẽ:</p></div><ul class="goal-list">${items.map(([b,t,s])=>`<li>${b}<div><b>${esc(t)}</b>${s?`<p class="small muted">${hzWrap(s)}</p>`:''}</div></li>`).join('')}</ul><div class="note"><p>Đi lần lượt từng bước. Bấm vào chữ hoặc nút loa để nghe. Cuối bài làm đúng từ 60% là mở ngày tiếp theo.</p></div>`}
+  else if(st.kind==='summary'){foot=false;body=summaryHtml()}
+  else{const badge=st.lang==='zh'?LZH:st.lang==='en'?LEN:LMIX;body=`<div class="pstep-head"><div class="row">${badge}</div><h2>${hzWrap(st.title)}</h2></div>`+(st.quiz?`<div id="pquiz"></div>`:st.html());if(st.quiz)foot='quiz'}
+  $('#player').innerHTML=`<div class="phead"><button class="pclose" data-act="go" data-to="path" aria-label="Thoát bài">✕</button><div class="bar"><i style="width:${pct}%"></i></div><span class="pcount">${P.i+1}/${P.steps.length}</span></div><div class="pbody">${body}</div>${foot?`<div class="pfoot"><button class="btn ghost" data-act="pback" ${P.i===0?'disabled':''}>← Quay lại</button>${foot==='quiz'?'<span class="small muted" style="align-self:center">Trả lời hết để đi tiếp</span>':`<button class="btn primary" data-act="pnext">${P.i===0?'Bắt đầu học':'Tiếp →'}</button>`}</div>`:''}`;
+  window.scrollTo(0,0);
+  if(st.quiz){const i=P.i;startQuiz($('#pquiz'),st.quiz(),(s,t)=>{P.res[i]={s,t};pnext()})}
+  else if(st.say)speak(st.say,'zh');else if(st.sayEn)speak(st.sayEn,'en')}
+function pnext(){const P=PLAYER;if(!P)return;if(P.i<P.steps.length-1){P.i++;renderStep()}}
+function pback(){const P=PLAYER;if(!P||P.i===0)return;P.i--;renderStep()}
+function summaryHtml(){const P=PLAYER;let s=0,t=0;Object.values(P.res).forEach(r=>{s+=r.s;t+=r.t});const pass=t===0||s/t>=0.6;const n=P.n;
+  if(!P.finished){P.finished=true;const prev=state.done[n]||{};state.done[n]={done:!!(prev.done||pass),best:Math.max(prev.best||0,t?Math.round(s/t*100):100)};if(pass&&P.steps.cards)addCards(P.steps.cards);recordDay();save()}
+  const added=pass&&P.steps.cards?P.steps.cards.length:0;const nx=n+1<DAYS.length?n+1:null;
+  return`<div class="result"><p class="eyebrow">Ngày ${n+1} · ${esc(dayTitle(DAYS[n]))}</p>${t?`<span class="score">${s}/${t}</span>`:''}<h2>${pass?'Hoàn thành!':'Gần được rồi'}</h2><p>${pass?(nx!=null?`Ngày ${nx+1} đã mở.`:'Bạn đã đi hết lộ trình hiện có. Vườn đã ra hoa!')+(added?` ${added} thẻ mới đã vào Ôn tập, sẽ hiện lại từ ngày mai.`:''):'Cần đúng từ 60% để mở ngày tiếp theo. Xem lại phần học một chút rồi thử lại nhé, không vội.'}</p>
+  <div class="row">${pass&&nx!=null?`<button class="btn primary big" data-act="go" data-to="day-${nx}">Học tiếp Ngày ${nx+1}</button>`:''}${pass?'':`<button class="btn primary" data-act="restartDay">Học lại ngày này</button>`}<button class="btn ghost" data-act="go" data-to="home">Về trang Hôm nay</button></div>
+  ${pass&&nx!=null?`<p class="small muted">Mẹo: mỗi ngày học 1 bài là đủ. Ngày mai mở mục Ôn tập trước rồi mới học bài mới.</p>`:''}</div>`}
+
+/* ========== quiz engine ========== */
 let QUIZ=null;
-function setNav(r){document.querySelectorAll('#nav button').forEach(b=>{const t=b.dataset.to;const on=t===r||(t==='chinese'&&r.startsWith('lesson-'))||(t==='games'&&r.startsWith('game-'));b.toggleAttribute('aria-current',on);if(on)b.setAttribute('aria-current','page')})}
-function render(){QUIZ=null;const r=(location.hash||'#home').slice(1)||'home';setNav(r);const v=$('#view');
-  if(r.startsWith('lesson-'))v.innerHTML=viewLesson(+r.slice(7));
+function startQuiz(el,qs,onDone){QUIZ={el,qs,i:0,score:0,answered:false,onDone,sel:{}};drawQuiz();sayQ()}
+function sayQ(){const q=QUIZ&&QUIZ.qs[QUIZ.i];if(!q)return;if(q.say)speak(q.say,'zh');else if(q.sayEn)speak(q.sayEn,'en')}
+function drawQuiz(){const z=QUIZ,q=z.qs[z.i];z.sel={};let body;
+  if(q.type==='build'){body=`<div class="build">${[['ini','Âm đầu',x=>x],['fin','Vần',x=>x],['t','Thanh',t=>`<span class="t${t}">${contour(t)}</span>`]].map(([k,lab,f])=>`<div class="slot"><span>${lab}</span><div class="choices">${q.choices[k].map(v=>`<button data-act="bpick" data-k="${k}" data-v="${v}" aria-pressed="false" aria-label="${lab} ${v}">${f(v)}</button>`).join('')}</div></div>`).join('')}<div class="row"><span class="preview" id="bprev"></span></div><div class="row"><button class="btn primary" data-act="bcheck" id="bcheck" disabled>Kiểm tra</button></div></div>`}
+  else body=`<div class="opts ${q.optsClass||''}">${q.opts.map((o,k)=>`<button class="opt" data-act="ans" data-k="${k}">${o.html}</button>`).join('')}</div>`;
+  const play=q.say?`<button class="play big" data-say="${esc(q.say)}">${ICON.play}<span>Nghe lại</span></button>`:q.sayEn?`<button class="play en big" data-say-en="${esc(q.sayEn)}">${ICON.play}<span>Listen again</span></button>`:'';
+  z.el.innerHTML=`<div class="quiz"><div class="qbar"><span>Câu ${z.i+1}/${z.qs.length}</span><div class="dots">${z.qs.map((_,k)=>`<i class="${k<z.i?'d':k===z.i?'c':''}"></i>`).join('')}</div></div><p class="qprompt">${q.prompt}</p>${q.show?`<div class="qshow">${q.show}</div>`:''}${play}${body}<div class="qfeed" id="qfeed"></div></div>`}
+function feedback(ok,q){const z=QUIZ;if(ok)z.score++;if(q.after)speak(q.after,'zh');
+  $('#qfeed').innerHTML=`<p class="verdict ${ok?'ok':'bad'}">${ok?'Chính xác!':'Chưa đúng, không sao.'}</p>${q.explain||''}<div class="row"><button class="btn primary" data-act="next">${z.i+1<z.qs.length?'Câu tiếp':'Tiếp tục'}</button></div>`;
+  $('#qfeed').scrollIntoView({block:'nearest',behavior:'smooth'})}
+function answer(k){const z=QUIZ;if(!z||z.answered)return;z.answered=true;const q=z.qs[z.i];const ok=q.opts[k].ok;document.querySelectorAll('.opt').forEach((b,i)=>{b.disabled=true;if(q.opts[i].ok)b.classList.add('ok');else if(i===k)b.classList.add('bad')});feedback(ok,q)}
+function nextQ(){const z=QUIZ;if(!z)return;z.i++;z.answered=false;if(z.i>=z.qs.length){const{score,qs,onDone}=z;QUIZ=null;onDone(score,qs.length);return}drawQuiz();sayQ()}
+function bpick(btn){const z=QUIZ;if(z.answered)return;const k=btn.dataset.k,v=btn.dataset.v;z.sel[k]=k==='t'?+v:v;btn.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===btn));const s=z.sel;$('#bprev').textContent=(s.ini||'_')+(s.fin||'__');if(s.ini&&s.fin&&s.t)$('#bprev').innerHTML=colorPy(mark(s.ini+s.fin,s.t));$('#bcheck').disabled=!(s.ini&&s.fin&&s.t)}
+function bcheck(){const z=QUIZ;if(z.answered)return;z.answered=true;const q=z.qs[z.i],s=z.sel,a=q.ans;const ok=s.ini===a.ini&&s.fin===a.fin&&s.t===a.t;document.querySelectorAll('.build .choices button').forEach(b=>{b.disabled=true;const k=b.dataset.k,v=k==='t'?+b.dataset.v:b.dataset.v;if(v===a[k])b.classList.add('ok');else if(v===s[k])b.classList.add('bad')});$('#bcheck').hidden=true;feedback(ok,q)}
+
+/* ========== review (spaced repetition) ========== */
+let REV=null;
+function viewReview(){const due=dueIds();const total=Object.keys(state.srs).length;
+  if(!due.length){const nextD=Object.values(state.srs).map(c=>c.d).sort()[0];return`<section class="hello"><p class="eyebrow">Ôn tập</p><h1>Ôn tập hôm nay</h1><p class="sub">Thẻ từ bạn đã học sẽ quay lại đúng lúc sắp quên: sau 1, 2, 4, 7, 15 rồi 30 ngày.</p></section><p class="empty">${total?`Hôm nay không còn thẻ nào cần ôn. Thẻ tiếp theo đến hạn ngày ${nextD.split('-').reverse().join('/')}.`:'Chưa có thẻ nào. Học xong một ngày “Từ mới” ở Giai đoạn 2, từ vựng sẽ vào đây.'}</p>`}
+  return`<section class="hello"><p class="eyebrow">Ôn tập</p><h1>${due.length} thẻ cần ôn</h1><p class="sub">Nhìn mặt trước, tự nhớ nghĩa và cách đọc, rồi lật thẻ. Chọn thật lòng, thẻ khó sẽ quay lại sớm hơn.</p></section><div class="row"><button class="btn primary big" data-act="revStart">Bắt đầu ôn ${Math.min(due.length,20)} thẻ</button></div>`}
+function revStart(){REV={q:shuffle(dueIds()).slice(0,20),i:0,ok:0,flipped:false,again:new Set()};drawRev()}
+function drawRev(){const v=$('#view');const R=REV;if(R.i>=R.q.length){v.innerHTML=`<div class="result"><p class="eyebrow">Ôn tập</p><h1>Xong rồi!</h1><p>Bạn đã ôn ${R.q.length} lượt thẻ. Hẹn gặp lại các thẻ này vào ngày đến hạn.</p><div class="row"><button class="btn primary" data-act="go" data-to="home">Về trang Hôm nay</button></div></div>`;REV=null;recordDay();save();return}
+  const id=R.q[R.i],c=CARD[id];const front=c.lang==='zh'?`${LZH}<span class="hz" ${c.sent?'style="font-size:2.2rem"':''}>${esc(c.hz)}</span>${playZh(c.hz)}`:`${LEN}<span class="w">${esc(c.w)}</span>${playEn(c.w)}`;
+  const back=c.lang==='zh'?`<span class="py" style="font-size:1.4rem">${colorPy(c.py)}</span><b>${esc(c.vi)}</b>${c.en?`<span class="muted">${esc(c.en)}</span>`:''}${c.ex?`<span class="small"><span class="hz">${esc(c.ex)}</span> · ${esc(c.exVi)}</span>`:''}`:`<b>${esc(c.vi)}</b><span class="small">${esc(c.ex)}</span>`;
+  v.innerHTML=`<div class="player"><div class="phead"><button class="pclose" data-act="go" data-to="home" aria-label="Dừng ôn tập">✕</button><div class="bar"><i style="width:${Math.round(R.i/R.q.length*100)}%"></i></div><span class="pcount">${R.i+1}/${R.q.length}</span></div><div class="flash">${front}${R.flipped?`<div class="back">${back}</div>`:''}</div><div class="row" style="justify-content:center">${R.flipped?`<button class="btn big" data-act="revGrade" data-ok="0">Chưa nhớ</button><button class="btn primary big" data-act="revGrade" data-ok="1">Nhớ rồi</button>`:`<button class="btn primary big" data-act="revFlip">Lật thẻ</button>`}</div></div>`;
+  if(!R.flipped)speak(c.lang==='zh'?c.hz:c.w,c.lang)}
+function revGrade(ok){const R=REV;const id=R.q[R.i];const c=state.srs[id]||{b:0};if(ok){if(!R.again.has(id))c.b=Math.min((c.b||0)+1,INT.length-1);c.d=addDays(INT[c.b]);R.ok++}else{c.b=0;c.d=TODAY();if(!R.again.has(id)){R.again.add(id);R.q.push(id)}}state.srs[id]=c;save();R.i++;R.flipped=false;drawRev()}
+
+/* ========== views ========== */
+function setNav(r){document.querySelectorAll('#nav button').forEach(b=>{const t=b.dataset.to;const on=t===r||(t==='path'&&r.startsWith('day-'))||(t==='practice'&&r.startsWith('game-'));if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')})}
+function render(){QUIZ=null;PLAYER=null;REV=null;const r=(location.hash||'#home').slice(1)||'home';setNav(r);const v=$('#view');
+  if(r.startsWith('day-')){v.innerHTML=viewDay(+r.slice(4));if(PLAYER)renderStep()}
   else if(r.startsWith('game-'))v.innerHTML=viewGame(r.slice(5));
-  else v.innerHTML=({home:viewHome,chinese:viewChinese,games:viewGames,words:viewWords,english:viewEnglish}[r]||viewHome)();
-  window.scrollTo(0,0)}
+  else v.innerHTML=({home:viewHome,path:viewPath,review:viewReview,practice:viewPractice,words:viewWords}[r]||viewHome)();
+  updateBadge();window.scrollTo(0,0)}
 window.addEventListener('hashchange',render);
 const go=to=>{if(location.hash==='#'+to)render();else location.hash=to};
 
-function viewHome(){
-  const dc=doneCount(),nx=nextLesson();const today=new Date().toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
-  const daily=[];
-  if(nx)daily.push([`${nx<=3?'8':'10'}′`,`Bài ${nx}: ${LESSONS[nx-1].t}`,LESSONS[nx-1].d,'lesson-'+nx,'Học']);
-  const gi=new Date().getDate()%GAMES.length;const g1=GAMES[gi],g2=GAMES[(gi+2)%GAMES.length];
-  daily.push(['3′',g1.t,g1.d,'game-'+g1.id,'Chơi']);
-  if(state.saved.length)daily.push(['2′','Ôn sổ từ',`Nghe lại ${state.saved.length} từ bạn đã lưu.`,'words','Ôn']);else daily.push(['3′',g2.t,g2.d,'game-'+g2.id,'Chơi']);
-  const completed=LESSONS.map((l,i)=>[i+1,l]).filter(([n])=>isDone(n));
-  const st=streak();
-  return`
-  <section class="hello"><p class="eyebrow">${esc(today)}</p><h1>Vườn ngôn ngữ của bạn</h1><p class="sub">Mỗi ngày một chút: nghe nhiều, chơi nhiều, không cần học thuộc. Nghỉ một hôm cũng không sao, vườn vẫn ở đây.</p></section>
-  <div class="grid2">
-   <div class="card journey"><span class="glyph" aria-hidden="true">中</span>
-    <p class="eyebrow">Chinese Journey</p><h2>Tiếng Trung từ con số 0</h2>
-    <div class="plantbox">${plant(dc)}<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px"><p class="small"><b>Level 1 · Pinyin</b> — ${dc}/${LESSONS.length} bài</p><div class="bar"><i style="width:${dc/LESSONS.length*100}%"></i></div><p class="small muted">${nx?`Tiếp theo: Bài ${nx} · ${esc(LESSONS[nx-1].t)}`:'Đã xong Level 1. Level 2 đang được chuẩn bị.'}</p></div></div>
-    <div class="row">${nx?`<button class="btn primary" data-act="go" data-to="lesson-${nx}">${dc?'Học tiếp':'Bắt đầu'} bài ${nx}</button>`:''}<button class="btn ghost" data-act="go" data-to="chinese">Xem lộ trình</button></div>
-   </div>
-   <div class="card journey en"><span class="glyph" aria-hidden="true">Aa</span>
-    <p class="eyebrow">English Journey</p><h2>Tiếng Anh hướng IELTS</h2>
-    <p class="small muted">Củng cố giao tiếp, từ vựng, ngữ pháp rồi đi dần lên kỹ năng IELTS. Phần này đang được xây dựng.</p>
-    <div class="row"><span class="pill">Sắp có</span><button class="btn ghost" data-act="go" data-to="english">Xem lộ trình dự kiến</button></div>
-   </div>
+function viewHome(){const dc=doneCount(),nx=nextDay(),due=dueIds().length,st=streak();const today=new Date().toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
+  const p1=DAYS.filter(d=>d.phase===1).length,p1d=DAYS.filter((d,i)=>d.phase===1&&isDone(i)).length,p2=DAYS.length-p1,p2d=dc-p1d;
+  let todayCard;
+  if(nx==null)todayCard=`<div class="card today"><span class="glyph" aria-hidden="true">花</span><p class="eyebrow">Lộ trình</p><h2>Bạn đã xong ${DAYS.length} ngày học!</h2><p class="muted">Giai đoạn 3–5 đang được soạn. Trong lúc chờ, hãy ôn tập mỗi ngày và chơi ở mục Luyện thêm.</p></div>`;
+  else{const d=DAYS[nx];const g=d.phase===1?'音':UNITS[d.ui].hz[0];
+    todayCard=`<div class="card today"><span class="glyph" aria-hidden="true">${g}</span><p class="eyebrow">Bài hôm nay · Ngày ${nx+1}/${DAYS.length}</p><h2>${esc(dayTitle(d))}</h2><div class="parts"><div>${LZH}<span>${hzWrap(d.zh)}</span></div><div>${LEN}<span>${esc(d.en)}</span></div></div><p class="small muted">Khoảng ${d.min} phút</p><div class="row"><button class="btn primary big" data-act="go" data-to="day-${nx}">${dc?'Học tiếp':'Bắt đầu học'}</button><button class="btn ghost" data-act="go" data-to="path">Xem lộ trình</button></div></div>`}
+  return`<section class="hello"><p class="eyebrow">${esc(today)}</p><h1>Hôm nay học gì?</h1><p class="sub">Mỗi ngày một bài, mỗi bài có cả tiếng Trung và tiếng Anh. Học xong thì ôn, không cần học thuộc lòng. Nghỉ một hôm cũng không sao.</p></section>
+  <div class="grid2">${todayCard}
+   <div class="card"><p class="eyebrow">Ôn tập</p><h2>${due?`${due} thẻ đến hạn`:'Không có thẻ cần ôn'}</h2><p class="small muted">${due?'Ôn trước khi học bài mới, khoảng 3–5 phút.':Object.keys(state.srs).length?'Bạn đã ôn đủ hôm nay.':'Từ vựng bạn học ở Giai đoạn 2 sẽ tự vào đây.'}</p><div class="row">${due?`<button class="btn primary" data-act="go" data-to="review">Ôn ngay</button>`:''}<button class="btn ghost" data-act="go" data-to="practice">Luyện thêm</button></div>
+   <div class="plantbox">${plant(dc,DAYS.length)}<div class="phase-bars" style="flex:1;min-width:0"><div class="ph"><span class="small"><b>Giai đoạn 1</b> · Nền âm thanh</span><span class="small muted">${p1d}/${p1}</span><div class="bar"><i style="width:${p1d/p1*100}%"></i></div></div><div class="ph"><span class="small"><b>Giai đoạn 2</b> · Giao tiếp</span><span class="small muted">${p2d}/${p2}</span><div class="bar"><i style="width:${p2d/p2*100}%"></i></div></div></div></div></div>
   </div>
-  <section class="level"><h2>Hôm nay học gì</h2><div class="card daily">${daily.map(([m,t,d,to,b])=>`<div class="it"><span class="min">${m}</span><div class="tx"><b>${esc(t)}</b><p class="small muted">${esc(d)}</p></div><button class="btn" data-act="go" data-to="${to}">${b}</button></div>`).join('')}</div></section>
-  <div class="grid4">
-   <div class="stat"><b>${state.days.length}</b><span>Ngày đã học</span></div>
-   <div class="stat"><b>${st}</b><span>Ngày liên tiếp</span></div>
-   <div class="stat"><b>${state.saved.length}</b><span>Từ đã lưu</span></div>
-   <div class="stat"><b>${dc}</b><span>Bài đã xong</span></div>
-  </div>
-  <section class="level"><h2>Đã hoàn thành</h2>${completed.length?`<div class="chips">${completed.map(([n,l])=>`<button class="btn" data-act="go" data-to="lesson-${n}">${ICON.check} Bài ${n} · ${esc(l.t)}</button>`).join('')}</div>`:`<p class="empty">Chưa có bài nào. Bài 1 mất khoảng 8 phút.</p>`}</section>
+  <div class="grid4"><div class="stat"><b>${dc}</b><span>Ngày đã học xong</span></div><div class="stat"><b>${st}</b><span>Ngày liên tiếp</span></div><div class="stat"><b>${Object.keys(state.srs).length}</b><span>Thẻ trong bộ ôn tập</span></div><div class="stat"><b>${state.days.length}</b><span>Ngày có học</span></div></div>
   ${voicePanel()}`}
+function voicePanel(){return`<section class="card"><h3>Âm thanh</h3><p class="small" id="voiceStatus">${voiceText()}</p><div class="voice-line"><button class="play" data-say="你好，我们开始吧">${ICON.play}<span>Thử tiếng Trung</span></button><button class="play en" data-say-en="Hello, let's get started.">${ICON.play}<span>Try English</span></button><span class="small muted">Tốc độ</span><div class="seg" role="group" aria-label="Tốc độ đọc">${[[0.6,'Chậm'],[0.8,'Vừa'],[1,'Thường']].map(([r,l])=>`<button data-act="rate" data-r="${r}" aria-pressed="${state.rate===r}">${l}</button>`).join('')}</div></div><p class="small muted">Không nghe thấy gì? Tăng âm lượng và tắt chế độ im lặng của iPad. Nếu vẫn không có tiếng, mở trang bằng Safari.</p></section>`}
 
-function voicePanel(){return`<section class="card"><h3>Âm thanh</h3><p class="small" id="voiceStatus">${voiceText()}</p>
-  <div class="voice-line"><button class="play" data-say="你好，我们开始吧">${ICON.play}<span>Thử giọng</span></button>
-  <span class="small muted">Tốc độ</span><div class="seg" role="group" aria-label="Tốc độ đọc">${[[0.6,'Chậm'],[0.8,'Vừa'],[1,'Thường']].map(([r,l])=>`<button data-act="rate" data-r="${r}" aria-pressed="${state.rate===r}">${l}</button>`).join('')}</div></div>
-  <p class="small muted">Không nghe thấy gì? Tăng âm lượng và gạt tắt chế độ im lặng của iPad. Nếu vẫn không có tiếng, mở trang bằng Safari.</p></section>`}
+function viewPath(){const nx=nextDay();const row=(n)=>{const d=DAYS[n];const dn=isDone(n),u=unlocked(n),now=n===nx;return`<button class="lrow ${dn?'done':now?'now':u?'':'locked'}" data-act="go" data-to="day-${n}" ${u?'':'aria-disabled="true"'}><span class="n">${dn?ICON.check:n+1}</span><span class="tx"><b>${esc(d.phase===1?`Ngày ${n+1} · Nền âm thanh ${d.k+1}`:`Ngày ${n+1} · ${PART[d.p].t}`)}</b><small>${LZH} ${hzWrap(d.zh)} ${LEN} ${esc(d.en)}</small></span>${dn?'<span class="pill done">Đã xong</span>':now?'<span class="pill now">Hôm nay</span>':u?'':`<span class="pill">${ICON.lock}</span>`}</button>`};
+  const p1=DAYS.map((d,i)=>[d,i]).filter(([d])=>d.phase===1);
+  return`<section class="hello"><p class="eyebrow">Lộ trình song ngữ</p><h1>Tiếng Trung từ số 0 + Tiếng Anh hướng IELTS</h1><p class="sub">Mỗi ngày một bài khoảng 12–15 phút, học cả hai ngôn ngữ cùng một chủ đề. Bài sau mở khi bạn làm đúng từ 60% bài trước. Từ vựng đã học tự vào mục Ôn tập.</p></section>
+  <div class="note"><h3>Vì sao học theo thứ tự này?</h3><ul><li><b>Giai đoạn 1 · Âm thanh trước.</b> Tiếng Trung học Pinyin và thanh điệu; tiếng Anh sửa phát âm (IPA, âm cuối, trọng âm). Phát âm đúng từ đầu thì nghe và nói về sau dễ hơn nhiều.</li><li><b>Giai đoạn 2 · Giao tiếp theo chủ đề.</b> Mỗi chủ đề học trong 3 ngày: từ mới → mẫu câu & ngữ pháp → hội thoại & nói. Tiếng Anh dùng luôn câu hỏi IELTS Speaking Part 1.</li><li><b>Mỗi ngày nên:</b> ôn thẻ đến hạn (3–5 phút) rồi học bài mới.</li></ul></div>
+  <section class="level"><div class="level-head"><h2>Giai đoạn 1 · Nền âm thanh</h2><span class="pill">${p1.filter(([,i])=>isDone(i)).length}/${p1.length} ngày</span></div><div class="lessons">${p1.map(([,i])=>row(i)).join('')}</div></section>
+  <section class="level"><div class="level-head"><h2>Giai đoạn 2 · Giao tiếp theo chủ đề</h2><span class="pill">${UNITS.length} chủ đề · ${UNITS.length*3} ngày</span></div>
+  ${UNITS.map((u,ui)=>`<div class="lessons"><div class="uhead"><span class="hz">${esc(u.hz)}</span><span>Chủ đề ${ui+1} · ${esc(u.vi)}</span><span class="muted small">${esc(u.en)}</span></div>${DAYS.map((d,i)=>[d,i]).filter(([d])=>d.phase===2&&d.ui===ui).map(([,i])=>row(i)).join('')}</div>`).join('')}</section>
+  <section class="level"><div class="level-head"><h2>Các giai đoạn tiếp theo</h2><span class="small muted">Đang soạn, mở sau Giai đoạn 2</span></div><div class="locked-levels">${LATER.map(L=>`<div class="lv"><b>${esc(L.t)}</b><ul>${L.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}</div></section>`}
 
-function viewChinese(){const dc=doneCount(),nx=nextLesson();return`
-  <section class="hello"><p class="eyebrow">Chinese Journey</p><h1>Lộ trình tiếng Trung cho người mới</h1><p class="sub">Năm chặng, đi từ âm thanh đến giao tiếp. Mỗi bài 5–10 phút. Bài sau mở khi bạn làm đúng 4/6 câu ở bài trước.</p></section>
-  <div class="note"><h3>Mới học nên bắt đầu từ đâu?</h3><p>Từ <b>Pinyin và thanh điệu</b>. Pinyin là “chìa khóa đọc”: nắm được nó, bạn tự đọc được mọi từ mới, phát âm đúng từ đầu và gõ được chữ Hán. Chữ Hán học song song sau, khi tai đã quen âm.</p></div>
-  <section class="level"><div class="level-head"><h2>Level 1 · Pinyin Foundation</h2><span class="pill ${dc===LESSONS.length?'done':''}">${dc}/${LESSONS.length} bài</span></div>
-  <div class="lessons">${LESSONS.map((l,i)=>{const n=i+1;const d=isDone(n),u=unlocked(n),now=n===nx;return`<button class="lrow ${d?'done':now?'now':u?'':'locked'}" data-act="go" data-to="lesson-${n}" ${u?'':'aria-disabled="true"'}><span class="n">${d?ICON.check:n}</span><span class="tx"><b>${esc(l.t)}</b><small>${esc(l.d)}</small></span>${d?'<span class="pill done">Đã xong</span>':now?'<span class="pill now">Học tiếp</span>':u?'':`<span class="pill">${ICON.lock}</span>`}</button>`}).join('')}</div></section>
-  <section class="level"><div class="level-head"><h2>Các chặng tiếp theo</h2><span class="small muted">Mở sau khi xong Level 1</span></div>
-  <div class="locked-levels">${LEVELS.map(L=>`<div class="lv"><div class="row" style="justify-content:space-between"><b>Level ${L.n} · ${esc(L.t)}</b><span class="pill">${ICON.lock} Đang chuẩn bị</span></div><ul>${L.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}</div></section>`}
+const GAMES=[
+ {id:'tone',t:'Bắt thanh điệu',d:'Nghe một chữ, chọn đúng 1 trong 4 thanh.',art:`<span class="t1">ā</span><span class="t2">á</span><span class="t3">ǎ</span><span class="t4">à</span>`,make:()=>many(Q.toneListen,10)},
+ {id:'pairs',t:'Đôi tai tinh',d:'Nghe và chọn giữa hai âm tiếng Trung rất giống nhau.',art:`<span>zh</span><span class="muted">/</span><span>z</span>`,make:()=>uniq(Q.pair,10)},
+ {id:'enpairs',t:'Ship hay Sheep?',d:'Nghe và phân biệt các cặp âm tiếng Anh dễ nhầm.',art:`<span style="color:var(--navy)">ship</span><span class="muted">/</span><span style="color:var(--navy)">sheep</span>`,make:()=>sample([...EN_SHORT,...EN_END,...EN_CONS],10).map(([a,b,t])=>enPair(a,b,t))},
+ {id:'build',t:'Ghép âm tiết',d:'Nghe rồi tự ghép âm đầu + vần + thanh.',art:`<span>b</span><span class="muted">+</span><span>a</span><span class="muted">+</span><span class="t4">ˋ</span>`,make:()=>uniq(Q.build,10)},
+ {id:'mark',t:'Đặt dấu thanh',d:'Chọn đúng chữ cái mang dấu. Không cần âm thanh.',art:`<span>h</span><span class="t3">ǎ</span><span>o</span>`,make:()=>uniq(Q.markPlace,10)},
+ {id:'vocab',t:'Từ vựng đã học',d:'Trộn từ tiếng Trung và tiếng Anh bạn đã học.',art:`<span class="hz">你好</span><span class="muted">·</span><span style="color:var(--navy)">hello</span>`,need:4,make:()=>{const ids=Object.keys(state.srs).filter(id=>id.startsWith('zw:')||id.startsWith('ew:'));const zw=[],ew=[];UNITS.forEach(u=>{u.zw.forEach(w=>{if(ids.includes('zw:'+w[0]))zw.push(w)});u.ew.forEach(w=>{if(ids.includes('ew:'+w[0]))ew.push(w)})});const fake={zw:zw.length>=4?zw:UNITS[0].zw,ew:ew.length>=4?ew:UNITS[0].ew};return shuffle(unitQuizVocab(fake,Math.min(5,fake.zw.length),Math.min(5,fake.ew.length)))}}
+];
+function viewPractice(){const learned=Object.keys(state.srs).length;return`<section class="hello"><p class="eyebrow">Luyện thêm</p><h1>Trò chơi luyện tai</h1><p class="sub">Không bắt buộc. Chơi lúc rảnh để tai quen âm, mỗi lượt 10 câu khoảng 3 phút.</p></section>
+  <div class="games">${GAMES.map(g=>{const s=state.games[g.id];const locked=g.need&&learned<g.need;return`<div class="card"><div class="art">${g.art}</div><h3>${esc(g.t)}</h3><p class="small muted">${esc(g.d)}</p><div class="row" style="justify-content:space-between">${locked?'<span class="small muted">Mở khi bạn học xong ngày Từ mới đầu tiên</span>':s?`<span class="small muted">Cao nhất ${s.best}/10 · ${s.plays} lượt</span>`:'<span class="small muted">Chưa chơi</span>'}<button class="btn primary" data-act="go" data-to="game-${g.id}" ${locked?'disabled':''}>Chơi</button></div></div>`}).join('')}</div>`}
+function viewGame(id){const g=GAMES.find(x=>x.id===id);if(!g)return viewPractice();const s=state.games[id];return`<button class="btn ghost" data-act="go" data-to="practice" style="align-self:flex-start">← Luyện thêm</button><section class="hello"><p class="eyebrow">Trò chơi</p><h1>${esc(g.t)}</h1><p class="sub">${esc(g.d)}</p></section><section id="gbody"><div class="card" style="max-width:560px"><div class="art" style="height:96px">${g.art}</div><p class="small muted">${s?`Điểm cao nhất ${s.best}/10.`:'Lượt đầu tiên của bạn.'}</p><div class="row"><button class="btn primary" data-act="gstart" data-id="${id}">Bắt đầu 10 câu</button></div></div></section>`}
+function startGame(id){const g=GAMES.find(x=>x.id===id);const el=$('#gbody');startQuiz(el,g.make(),(score,total)=>{const p=state.games[id]||{best:0,plays:0};const rec=score>p.best&&p.plays;state.games[id]={best:Math.max(p.best,score),plays:(p.plays||0)+1};recordDay();save();const st=score>=total*.9?3:score>=total*.6?2:1;el.innerHTML=`<div class="result"><p class="eyebrow">Kết quả</p>${stars(st)}<span class="score">${score}/${total}</span><p>${rec?'Kỷ lục mới!':score>=total*.8?'Tai bạn đang tinh dần lên.':'Mỗi lượt chơi là một lần tai được luyện. Thử thêm lượt nữa nhé.'}</p><div class="row"><button class="btn primary" data-act="gstart" data-id="${id}">Chơi lại</button><button class="btn ghost" data-act="go" data-to="practice">Trò chơi khác</button></div></div>`})}
 
-let LTAB='learn';
-function viewLesson(n){const l=LESSONS[n-1];if(!l)return viewChinese();
-  if(!unlocked(n))return`<button class="back" data-act="go" data-to="chinese">← Lộ trình</button><div class="card"><p class="eyebrow">Bài ${n}</p><h2>${esc(l.t)}</h2><p class="muted">Bài này sẽ mở khi bạn hoàn thành Bài ${n-1}: ${esc(LESSONS[n-2].t)}.</p><div class="row"><button class="btn primary" data-act="go" data-to="lesson-${n-1}">Đến Bài ${n-1}</button></div></div>`;
-  LTAB='learn';const best=state.lessons[n]?.best;
-  return`<button class="back" data-act="go" data-to="chinese">← Lộ trình</button>
-  <section class="lesson-head"><p class="eyebrow">Level 1 · Bài ${n}/${LESSONS.length}</p><h1>${esc(l.t)}</h1><p class="sub">${esc(l.d)}${best!=null?` · Điểm cao nhất ${best}/6`:''}</p></section>
-  <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-act="ltab" data-tab="learn" data-n="${n}">Học</button><button role="tab" aria-selected="false" data-act="ltab" data-tab="quiz" data-n="${n}">Luyện tập</button></div>
-  <section id="lbody">${lessonLearn(n)}</section>`}
-function lessonLearn(n){return`<div class="prose">${LESSONS[n-1].learn()}</div><div class="row" style="margin-top:22px"><button class="btn primary" data-act="ltab" data-tab="quiz" data-n="${n}">Luyện tập 6 câu</button></div>`}
-function startLessonQuiz(n){const el=$('#lbody');document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab==='quiz'));
-  startQuiz(el,LESSONS[n-1].quiz(),(score,total)=>{const prev=state.lessons[n]||{};const pass=score>=4;state.lessons[n]={done:!!(prev.done||pass),best:Math.max(prev.best||0,score)};recordDay();save();
-    const nextOk=pass&&n<LESSONS.length;
-    el.innerHTML=`<div class="result"><p class="eyebrow">Kết quả</p><span class="score">${score}/${total}</span><p>${pass?(n===LESSONS.length?'Bạn đã xong Level 1 Pinyin. Vườn đã ra hoa!':'Tốt lắm! Bài tiếp theo đã mở.'):'Chưa đủ 4 câu đúng. Nghe lại phần Học một chút rồi thử lần nữa nhé, không vội.'}</p><div class="row">${nextOk?`<button class="btn primary" data-act="go" data-to="lesson-${n+1}">Bài ${n+1}: ${esc(LESSONS[n].t)}</button>`:''}<button class="btn" data-act="ltab" data-tab="quiz" data-n="${n}">Làm lại</button><button class="btn ghost" data-act="ltab" data-tab="learn" data-n="${n}">Xem lại bài</button></div></div>`})}
+function viewWords(){const zh=[],en=[];Object.keys(state.srs).forEach(id=>{const c=CARD[id];if(!c)return;if(c.lang==='zh')zh.push(c);else en.push(c)});
+  state.saved.forEach(k=>{if(k.startsWith('en:')){const w=ENIDX[k.slice(3)];if(w&&!en.find(c=>c.w===w.w))en.push({w:w.w,vi:w.vi,ex:w.ex})}else{const w=IDX[k];if(w&&!zh.find(c=>c.hz===w.hz))zh.push({hz:w.hz,py:w.py,vi:w.vi})}});
+  const zr=zh.map(c=>`<div class="wrow">${playZh(c.hz)}<span class="hz">${esc(c.hz)}</span><div class="tx"><span class="py">${colorPy(c.py)}</span><small>${esc(c.vi)}</small></div>${saveBtn(c.hz)}</div>`).join('');
+  const er=en.map(c=>`<div class="wrow">${playEn(c.w)}<span class="w">${esc(c.w)}</span><div class="tx"><span>${esc(c.vi)}</span><small>${esc(c.ex||'')}</small></div>${saveBtn('en:'+c.w)}</div>`).join('');
+  return`<section class="hello"><p class="eyebrow">Sổ từ</p><h1>Từ đã học</h1><p class="sub">Gồm từ đã vào bộ ôn tập và những từ bạn đánh dấu sao. Bấm loa để nghe lại.</p></section>
+  ${zh.length||en.length?`<section class="level"><div class="level-head"><h2>${LZH} Tiếng Trung</h2><span class="small muted">${zh.length} từ</span></div>${zh.length?`<div class="words">${zr}</div>`:'<p class="empty">Chưa có từ tiếng Trung.</p>'}</section><section class="level"><div class="level-head"><h2>${LEN} Tiếng Anh</h2><span class="small muted">${en.length} từ</span></div>${en.length?`<div class="words">${er}</div>`:'<p class="empty">Chưa có từ tiếng Anh.</p>'}</section>`:`<p class="empty">Chưa có từ nào. Học xong ngày “Từ mới” đầu tiên ở Giai đoạn 2, từ vựng sẽ hiện ở đây.</p>`}`}
 
-function viewGames(){return`
-  <section class="hello"><p class="eyebrow">Sân chơi</p><h1>Trò chơi Pinyin</h1><p class="sub">Mỗi lượt 10 câu, khoảng 3 phút. Chơi bất cứ lúc nào, không cần mở khóa.</p></section>
-  <div class="games">${GAMES.map(g=>{const s=state.games[g.id];return`<div class="card game"><div class="art">${g.art}</div><h3>${esc(g.t)}</h3><p class="small muted">${esc(g.d)}</p><div class="row" style="justify-content:space-between">${s?`<span class="small muted">Cao nhất ${s.best}/10 · ${s.plays} lượt</span>`:'<span class="small muted">Chưa chơi</span>'}<button class="btn primary" data-act="go" data-to="game-${g.id}">Chơi</button></div></div>`}).join('')}</div>`}
-function viewGame(id){const g=GAMES.find(x=>x.id===id);if(!g)return viewGames();const s=state.games[id];return`
-  <button class="back" data-act="go" data-to="games">← Trò chơi</button>
-  <section class="lesson-head"><p class="eyebrow">Trò chơi Pinyin</p><h1>${esc(g.t)}</h1><p class="sub">${esc(g.d)}</p></section>
-  <section id="gbody"><div class="card" style="max-width:560px"><div class="art game" style="height:96px;border-radius:12px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;gap:14px;font:700 2rem/1 var(--f-py)">${g.art}</div><p class="small muted">${s?`Điểm cao nhất ${s.best}/10.`:'Lượt đầu tiên của bạn.'} Bấm bắt đầu, iPad sẽ đọc câu đầu tiên.</p><div class="row"><button class="btn primary" data-act="gstart" data-id="${id}">Bắt đầu 10 câu</button></div></div></section>`}
-function startGame(id){const g=GAMES.find(x=>x.id===id);const el=$('#gbody');
-  startQuiz(el,g.make(),(score,total)=>{const p=state.games[id]||{best:0,plays:0};const rec=score>p.best;state.games[id]={best:Math.max(p.best,score),plays:(p.plays||0)+1};recordDay();save();const st=score>=9?3:score>=6?2:1;
-    el.innerHTML=`<div class="result"><p class="eyebrow">Kết quả</p>${stars(st)}<span class="score">${score}/${total}</span><p>${rec&&p.plays?'Kỷ lục mới!':score>=8?'Tai bạn đang tinh dần lên.':'Mỗi lượt chơi là một lần tai được luyện. Thử thêm lượt nữa nhé.'}</p><div class="row"><button class="btn primary" data-act="gstart" data-id="${id}">Chơi lại</button><button class="btn ghost" data-act="go" data-to="games">Trò chơi khác</button></div></div>`})}
-
-function viewWords(){const list=state.saved.map(h=>IDX[h]).filter(Boolean);return`
-  <section class="hello"><p class="eyebrow">Sổ từ</p><h1>Từ đã lưu</h1><p class="sub">Bấm ngôi sao ở Bài 10 hoặc sau mỗi câu trả lời để lưu từ. Mở sổ ra nghe lại vài lần mỗi ngày là đủ.</p></section>
-  ${list.length?`<div class="row"><button class="play" data-act="playAll">${ICON.play}<span>Nghe lần lượt</span></button></div><div class="words">${list.map(w=>`<div class="wrow"><button class="playw" data-say="${esc(w.hz)}" aria-label="Nghe ${esc(w.hz)}">${ICON.play}</button><span class="hz">${esc(w.hz)}</span><div class="tx"><span class="py">${colorPy(w.py)}</span><small>${esc(w.vi)}</small></div>${saveBtn(w.hz)}</div>`).join('')}</div>`:`<p class="empty">Chưa có từ nào. Thử <button class="btn" data-act="go" data-to="lesson-10" style="margin-left:6px">Bài 10</button> hoặc một trò chơi.</p>`}`}
-
-function viewEnglish(){const lv=[['Foundation refresh','Ôn phát âm, các thì cơ bản, câu giao tiếp hằng ngày'],['Vocabulary by topic','Từ vựng theo chủ đề và cụm từ đi kèm (collocations)'],['Grammar in use','Ngữ pháp qua tình huống, sửa lỗi người Việt hay mắc'],['Listening & Speaking','Nghe đoạn ngắn, nhại giọng, trả lời câu hỏi'],['IELTS skills','Làm quen 4 kỹ năng, mục tiêu band 5.5 → 6.5']];return`
-  <section class="hello"><p class="eyebrow">English Journey</p><h1>Lộ trình tiếng Anh dự kiến</h1><p class="sub">Dành cho người đã có nền tảng, muốn giao tiếp tự tin hơn và hướng đến IELTS. Hai ngôn ngữ học độc lập, không bắt buộc học cùng lúc.</p></section>
-  <div class="lessons">${lv.map(([t,d],i)=>`<div class="lrow locked" style="opacity:.8"><span class="n">${i+1}</span><span class="tx"><b>${esc(t)}</b><small>${esc(d)}</small></span><span class="pill">Sắp có</span></div>`).join('')}</div>
-  <p class="small muted">Phần tiếng Anh sẽ được thêm vào cùng trang này, tiến độ tiếng Trung của bạn vẫn giữ nguyên.</p>`}
-
-/* ---------- quiz engine ---------- */
-function startQuiz(el,qs,onDone){QUIZ={el,qs,i:0,score:0,answered:false,onDone,sel:{}};drawQuiz();sayQ()}
-function sayQ(){const q=QUIZ&&QUIZ.qs[QUIZ.i];if(q&&q.say)speak(q.say)}
-function drawQuiz(){const z=QUIZ,q=z.qs[z.i];z.sel={};
-  let body;
-  if(q.type==='build'){body=`<div class="build">
-    ${[['ini','Âm đầu',x=>x],['fin','Vần',x=>x],['t','Thanh',t=>`<span class="t${t}">${contour(t)}</span>`]].map(([k,lab,f])=>`<div class="slot"><span>${lab}</span><div class="choices">${q.choices[k].map(v=>`<button data-act="bpick" data-k="${k}" data-v="${v}" aria-pressed="false" aria-label="${lab} ${v}">${f(v)}</button>`).join('')}</div></div>`).join('')}
-    <div class="row"><span class="preview" id="bprev"></span></div>
-    <div class="row"><button class="btn primary" data-act="bcheck" id="bcheck" disabled>Kiểm tra</button></div></div>`}
-  else body=`<div class="opts ${q.optsClass||''}">${q.opts.map((o,k)=>`<button class="opt" data-act="ans" data-k="${k}">${o.html}</button>`).join('')}</div>`;
-  z.el.innerHTML=`<div class="quiz">
-   <div class="qbar"><span>Câu ${z.i+1}/${z.qs.length}</span><div class="dots">${z.qs.map((_,k)=>`<i class="${k<z.i?'d':k===z.i?'c':''}"></i>`).join('')}</div></div>
-   <p class="qprompt">${q.prompt}</p>
-   ${q.show?`<div class="qshow">${q.show}</div>`:''}
-   ${q.say?`<button class="play big" data-say="${esc(q.say)}">${ICON.play}<span>Nghe lại</span></button>`:''}
-   ${body}
-   <div class="qfeed" id="qfeed"></div></div>`}
-function feedback(ok,q){const z=QUIZ;if(ok)z.score++;if(q.after)speak(q.after);
-  $('#qfeed').innerHTML=`<p class="verdict ${ok?'ok':'bad'}">${ok?'Chính xác!':'Chưa đúng, không sao.'}</p>${q.explain||''}<div class="row"><button class="btn primary" data-act="next">${z.i+1<z.qs.length?'Câu tiếp':'Xem kết quả'}</button></div>`;
-  const nb=document.querySelector('[data-act="next"]');nb&&nb.focus({preventScroll:true});$('#qfeed').scrollIntoView({block:'nearest',behavior:'smooth'})}
-function answer(k){const z=QUIZ;if(!z||z.answered)return;z.answered=true;const q=z.qs[z.i];const ok=q.opts[k].ok;
-  document.querySelectorAll('.opt').forEach((b,i)=>{b.disabled=true;if(q.opts[i].ok)b.classList.add('ok');else if(i===k)b.classList.add('bad')});feedback(ok,q)}
-function nextQ(){const z=QUIZ;z.i++;z.answered=false;if(z.i>=z.qs.length){const{score,qs,onDone}=z;QUIZ=null;onDone(score,qs.length);return}drawQuiz();sayQ()}
-function bpick(btn){const z=QUIZ;if(z.answered)return;const k=btn.dataset.k,v=btn.dataset.v;z.sel[k]=k==='t'?+v:v;btn.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===btn));
-  const s=z.sel;$('#bprev').textContent=(s.ini||'_')+(s.fin?(s.t?mark(s.fin,s.t):s.fin):'__');if(s.ini&&s.fin&&s.t)$('#bprev').innerHTML=colorPy(mark(s.ini+s.fin,s.t));$('#bcheck').disabled=!(s.ini&&s.fin&&s.t)}
-function bcheck(){const z=QUIZ;if(z.answered)return;z.answered=true;const q=z.qs[z.i],s=z.sel,a=q.ans;const ok=s.ini===a.ini&&s.fin===a.fin&&s.t===a.t;
-  document.querySelectorAll('.build .choices button').forEach(b=>{b.disabled=true;const k=b.dataset.k,v=k==='t'?+b.dataset.v:b.dataset.v;if(v===a[k])b.classList.add('ok');else if(v===s[k])b.classList.add('bad')});$('#bcheck').hidden=true;feedback(ok,q)}
-
-/* ---------- actions ---------- */
-let quickItem=null;
+/* ========== actions ========== */
+let quickItem=null,timerId=null;
 const ACT={
- go:a=>{if(a.getAttribute('aria-disabled')==='true'){toast('Hoàn thành bài trước để mở bài này');return}go(a.dataset.to)},
- ans:a=>answer(+a.dataset.k),
- next:()=>nextQ(),
- bpick:a=>bpick(a),
- bcheck:()=>bcheck(),
- ltab:a=>{const n=+a.dataset.n;if(a.dataset.tab==='quiz')startLessonQuiz(n);else{QUIZ=null;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab==='learn'));$('#lbody').innerHTML=lessonLearn(n)}window.scrollTo({top:0})},
+ go:a=>{if(a.getAttribute('aria-disabled')==='true'){toast('Học xong ngày trước để mở ngày này');return}go(a.dataset.to)},
+ ans:a=>answer(+a.dataset.k),next:()=>nextQ(),bpick:a=>bpick(a),bcheck:()=>bcheck(),
+ pnext:()=>pnext(),pback:()=>pback(),
+ restartDay:()=>{if(!PLAYER)return;PLAYER={n:PLAYER.n,steps:buildSteps(PLAYER.n),i:0,res:{},finished:false};renderStep()},
  gstart:a=>startGame(a.dataset.id),
- save:a=>{const hz=a.dataset.hz;const i=state.saved.indexOf(hz);if(i>=0)state.saved.splice(i,1);else state.saved.push(hz);save();const on=i<0;document.querySelectorAll(`.save[data-hz="${CSS.escape(hz)}"]`).forEach(b=>{b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});toast(on?'Đã lưu vào Sổ từ':'Đã bỏ khỏi Sổ từ')},
- rate:a=>{state.rate=+a.dataset.r;save();a.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===a));speak('你好')},
- quick:()=>{quickItem=toneItem();speak(quickItem.hz);$('#quickShow').disabled=false;$('#quickAns').innerHTML=''},
- quickShow:()=>{if(quickItem)$('#quickAns').innerHTML=`<div style="margin-top:10px">${reveal(quickItem.hz,quickItem.py,quickItem.vi)}</div>`},
- playAll:()=>{const list=state.saved.slice();if(!list.length||!('speechSynthesis'in window))return;speechSynthesis.cancel();list.forEach(h=>{const u=new SpeechSynthesisUtterance(h);u.lang='zh-CN';if(zhVoice)u.voice=zhVoice;u.rate=state.rate;speechSynthesis.speak(u);const p=new SpeechSynthesisUtterance(' ');p.lang='zh-CN';p.volume=0;speechSynthesis.speak(p)})}
+ save:a=>{const k=a.dataset.k;const i=state.saved.indexOf(k);if(i>=0)state.saved.splice(i,1);else state.saved.push(k);save();const on=i<0;document.querySelectorAll(`.save[data-k="${CSS.escape(k)}"]`).forEach(b=>{b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});toast(on?'Đã lưu vào Sổ từ':'Đã bỏ khỏi Sổ từ')},
+ rate:a=>{state.rate=+a.dataset.r;save();a.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===a));speak('你好','zh')},
+ quick:()=>{quickItem=toneItem();speak(quickItem.hz,'zh');$('#quickShow').disabled=false;$('#quickAns').innerHTML=''},
+ quickShow:()=>{if(quickItem)$('#quickAns').innerHTML=`<div style="margin-top:10px">${revealZh(quickItem.hz,quickItem.py,quickItem.vi)}</div>`},
+ playDialog:a=>{const u=UNITS[+a.dataset.u];speakQueue(u.dl.map(l=>[l[1],'zh']))},
+ toggleDl:a=>{const on=a.getAttribute('aria-pressed')!=='true';a.setAttribute('aria-pressed',on);$('#dlg').classList.toggle(a.dataset.c,on)},
+ showSample:a=>{const el=$('#sample'+a.dataset.i);el.hidden=false;a.hidden=true},
+ timer:a=>{clearInterval(timerId);let s=45;const el=$('#tmr');a.textContent='Đếm lại';el.textContent='0:45';timerId=setInterval(()=>{s--;if(!document.body.contains(el)){clearInterval(timerId);return}el.textContent='0:'+pad(Math.max(s,0));if(s<=0){clearInterval(timerId);el.textContent='Hết giờ!'}},1000)},
+ revStart:()=>revStart(),revFlip:()=>{REV.flipped=true;drawRev()},revGrade:a=>revGrade(a.dataset.ok==='1')
 };
-document.addEventListener('click',e=>{const s=e.target.closest('[data-say]');if(s)speak(s.dataset.say);const a=e.target.closest('[data-act]');if(a&&ACT[a.dataset.act])ACT[a.dataset.act](a,e)});
+document.addEventListener('click',e=>{const s=e.target.closest('[data-say]');if(s)speak(s.dataset.say,'zh');const se=e.target.closest('[data-say-en]');if(se&&!s)speak(se.dataset.sayEn,'en');const a=e.target.closest('[data-act]');if(a&&!a.disabled&&ACT[a.dataset.act])ACT[a.dataset.act](a,e)});
 
 render();
 initCloud();
